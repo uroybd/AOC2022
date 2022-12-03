@@ -13,10 +13,10 @@ fn get_common(rucksack: &String) -> char {
         .expect("No common items")
 }
 
-fn get_priority(item: char) -> usize {
-    let digit = item as usize;
+fn get_priority(item: char) -> u32 {
+    let digit = item as u32;
     if digit < 91 {
-        return (26 + digit - 64).try_into().unwrap();
+        return (digit - 38).try_into().unwrap();
     } else {
         return (digit - 96).try_into().unwrap();
     }
@@ -33,25 +33,25 @@ fn get_badge(rucksacks: &[String]) -> char {
         .expect("No common items")
 }
 
-fn get_total_priorities(input: Vec<String>) -> usize {
+fn get_total_priorities(input: Vec<String>) -> u32 {
     input.iter().map(|r| get_priority(get_common(r))).sum()
 }
 
-fn get_total_badge_priorities(input: Vec<String>) -> usize {
+fn get_total_badge_priorities(input: Vec<String>) -> u32 {
     input
         .chunks(3)
         .map(|rss| get_priority(get_badge(rss)))
         .sum()
 }
 
-pub fn solution_day_03_01(file_path: String) -> usize {
+pub fn solution_day_03_01(file_path: String) -> Option<u32> {
     let input = read_lines(file_path);
-    get_total_priorities(input)
+    Some(get_total_priorities(input))
 }
 
-pub fn solution_day_03_02(file_path: String) -> usize {
+pub fn solution_day_03_02(file_path: String) -> Option<u32> {
     let input = read_lines(file_path);
-    get_total_badge_priorities(input)
+    Some(get_total_badge_priorities(input))
 }
 
 #[cfg(test)]
@@ -62,14 +62,14 @@ mod tests {
     fn test_day_03_01() {
         let file_path: String = String::from("src/inputs/day03e.txt");
         let result = solution_day_03_01(file_path);
-        assert_eq!(result, 157);
+        assert_eq!(result.unwrap(), 157);
     }
 
     #[test]
-    fn test_day_01_02() {
+    fn test_day_03_02() {
         let file_path: String = String::from("src/inputs/day03e.txt");
         let result = solution_day_03_02(file_path);
-        assert_eq!(result, 70);
+        assert_eq!(result.unwrap(), 70);
     }
 
     #[test]
@@ -79,18 +79,18 @@ mod tests {
         let start = std::time::Instant::now();
         let result = solution_day_03_01(file_path);
         eprintln!("elapsed {:?}", start.elapsed().as_secs_f64());
-        println!("{:?}", result);
+        println!("{:?}", result.unwrap());
         assert_eq!(1, 1);
     }
 
     #[test]
     #[ignore]
-    fn output_day_01_02() {
+    fn output_day_03_02() {
         let file_path: String = String::from("src/inputs/day03.txt");
         let start = std::time::Instant::now();
         let result = solution_day_03_02(file_path);
         eprintln!("elapsed {:?}", start.elapsed().as_secs_f64());
-        println!("{:?}", result);
+        println!("{:?}", result.unwrap());
         assert_eq!(1, 1);
     }
 }

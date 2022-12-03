@@ -2,7 +2,7 @@
 
 use crate::utils::read::read_lines;
 
-fn score_from_string(s: &str) -> usize {
+fn score_from_string(s: &str) -> u32 {
     match s {
         "A" | "X" => 1,
         "B" | "Y" => 2,
@@ -10,7 +10,7 @@ fn score_from_string(s: &str) -> usize {
     }
 }
 
-fn get_score(opponent: usize, me: usize) -> usize {
+fn get_score(opponent: u32, me: u32) -> u32 {
     if me == opponent {
         return 3 + me;
     }
@@ -22,7 +22,7 @@ fn get_score(opponent: usize, me: usize) -> usize {
     }
 }
 
-fn get_game_score(rounds: &Vec<String>) -> usize {
+fn get_game_score(rounds: &Vec<String>) -> u32 {
     rounds
         .iter()
         .map(|r| {
@@ -32,7 +32,7 @@ fn get_game_score(rounds: &Vec<String>) -> usize {
         .sum()
 }
 
-fn get_score_following_strategy(opponent: usize, strategy: &str) -> usize {
+fn get_score_following_strategy(opponent: u32, strategy: &str) -> u32 {
     return match strategy {
         "X" => ((opponent + 1) % 3) + 1,
         "Y" => 3 + opponent,
@@ -40,7 +40,7 @@ fn get_score_following_strategy(opponent: usize, strategy: &str) -> usize {
     };
 }
 
-fn get_game_score_following_strategy(rounds: &Vec<String>) -> usize {
+fn get_game_score_following_strategy(rounds: &Vec<String>) -> u32 {
     rounds
         .iter()
         .map(|r| {
@@ -50,14 +50,14 @@ fn get_game_score_following_strategy(rounds: &Vec<String>) -> usize {
         .sum()
 }
 
-pub fn solution_day_02_01(file_path: String) -> usize {
+pub fn solution_day_02_01(file_path: String) -> Option<u32> {
     let input = read_lines(file_path);
-    return get_game_score(&input);
+    Some(get_game_score(&input))
 }
 
-pub fn solution_day_02_02(file_path: String) -> usize {
+pub fn solution_day_02_02(file_path: String) -> Option<u32> {
     let input = read_lines(file_path);
-    return get_game_score_following_strategy(&input);
+    Some(get_game_score_following_strategy(&input))
 }
 
 #[cfg(test)]
@@ -68,14 +68,14 @@ mod tests {
     fn test_day_02_01() {
         let file_path: String = String::from("src/inputs/day02e.txt");
         let result = solution_day_02_01(file_path);
-        assert_eq!(result, 15);
+        assert_eq!(result.unwrap(), 15);
     }
 
     #[test]
-    fn test_day_01_02() {
+    fn test_day_02_02() {
         let file_path: String = String::from("src/inputs/day02e.txt");
         let result = solution_day_02_02(file_path);
-        assert_eq!(result, 12);
+        assert_eq!(result.unwrap(), 12);
     }
 
     #[test]
@@ -85,18 +85,18 @@ mod tests {
         let start = std::time::Instant::now();
         let result = solution_day_02_01(file_path);
         eprintln!("elapsed {:?}", start.elapsed().as_secs_f64());
-        println!("{:?}", result);
+        println!("{:?}", result.unwrap());
         assert_eq!(1, 1);
     }
 
     #[test]
     #[ignore]
-    fn output_day_01_02() {
+    fn output_day_02_02() {
         let file_path: String = String::from("src/inputs/day02.txt");
         let start = std::time::Instant::now();
         let result = solution_day_02_02(file_path);
         eprintln!("elapsed {:?}", start.elapsed().as_secs_f64());
-        println!("{:?}", result);
+        println!("{:?}", result.unwrap());
         assert_eq!(1, 1);
     }
 }

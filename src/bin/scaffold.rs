@@ -8,7 +8,10 @@ use std::{
     process,
 };
 
-const MODULE_TEMPLATE: &str = r###"pub fn solution_day_DAY_01(file_path: String) -> Option<u32> {
+const MODULE_TEMPLATE: &str = r###"// Advent of Code 2022 - Day DAY
+
+
+pub fn solution_day_DAY_01(file_path: String) -> Option<u32> {
     None
 }
 
