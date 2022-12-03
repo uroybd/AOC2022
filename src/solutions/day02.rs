@@ -1,3 +1,5 @@
+// Advent of Code 2022 - Day 02
+
 use crate::utils::read::read_lines;
 
 fn score_from_string(s: &str) -> usize {

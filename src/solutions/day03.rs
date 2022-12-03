@@ -1,6 +1,7 @@
-use std::collections::HashSet;
+// Advent of Code 2022 - Day 03
 
 use crate::utils::read::read_lines;
+use std::collections::HashSet;
 
 fn get_common(rucksack: &String) -> char {
     let length = rucksack.len() / 2;

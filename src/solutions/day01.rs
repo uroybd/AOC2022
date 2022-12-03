@@ -1,3 +1,5 @@
+// Advent of Code 2022 - Day 01
+
 use std::fs;
 
 fn get_calorie_counts(input: String) -> Vec<usize> {
