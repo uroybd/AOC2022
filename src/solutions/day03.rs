@@ -76,7 +76,9 @@ mod tests {
     #[ignore]
     fn output_day_03_01() {
         let file_path: String = String::from("src/inputs/day03.txt");
+        let start = std::time::Instant::now();
         let result = solution_day_03_01(file_path);
+        eprintln!("elapsed {:?}", start.elapsed().as_secs_f64());
         println!("{:?}", result);
         assert_eq!(1, 1);
     }
@@ -85,7 +87,9 @@ mod tests {
     #[ignore]
     fn output_day_01_02() {
         let file_path: String = String::from("src/inputs/day03.txt");
+        let start = std::time::Instant::now();
         let result = solution_day_03_02(file_path);
+        eprintln!("elapsed {:?}", start.elapsed().as_secs_f64());
         println!("{:?}", result);
         assert_eq!(1, 1);
     }
