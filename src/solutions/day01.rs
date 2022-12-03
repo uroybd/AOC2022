@@ -38,15 +38,15 @@ mod tests {
     #[test]
     fn test_day_01_01() {
         let file_path: String = String::from("src/inputs/day01e.txt");
-        let result = solution_day_01_01(file_path);
-        assert_eq!(result.unwrap(), 24000);
+        let result = solution_day_01_01(file_path).unwrap();
+        assert_eq!(result, 24000);
     }
 
     #[test]
     fn test_day_01_02() {
         let file_path: String = String::from("src/inputs/day01e.txt");
-        let result = solution_day_01_02(file_path);
-        assert_eq!(result.unwrap(), 45000);
+        let result = solution_day_01_02(file_path).unwrap();
+        assert_eq!(result, 45000);
     }
 
     #[test]

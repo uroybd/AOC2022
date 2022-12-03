@@ -67,15 +67,15 @@ mod tests {
     #[test]
     fn test_day_02_01() {
         let file_path: String = String::from("src/inputs/day02e.txt");
-        let result = solution_day_02_01(file_path);
-        assert_eq!(result.unwrap(), 15);
+        let result = solution_day_02_01(file_path).unwrap();
+        assert_eq!(result, 15);
     }
 
     #[test]
     fn test_day_02_02() {
         let file_path: String = String::from("src/inputs/day02e.txt");
-        let result = solution_day_02_02(file_path);
-        assert_eq!(result.unwrap(), 12);
+        let result = solution_day_02_02(file_path).unwrap();
+        assert_eq!(result, 12);
     }
 
     #[test]
