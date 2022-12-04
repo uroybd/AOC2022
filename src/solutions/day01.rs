@@ -7,7 +7,7 @@ fn get_calorie_counts(input: String) -> Vec<usize> {
         .trim()
         .split("\n\n")
         .map(|inv| {
-            inv.split("\n")
+            inv.split('\n')
                 .map(|item| item.parse::<usize>().unwrap())
                 .sum()
         })
@@ -17,7 +17,7 @@ fn get_calorie_counts(input: String) -> Vec<usize> {
     calories
 }
 
-fn get_top_n(calories: &Vec<usize>, count: usize) -> usize {
+fn get_top_n(calories: &[usize], count: usize) -> usize {
     return calories.iter().take(count).sum();
 }
 

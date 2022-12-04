@@ -16,15 +16,14 @@ fn get_common(rucksack: &String) -> char {
 fn get_priority(item: char) -> usize {
     let digit = item as usize;
     if digit < 91 {
-        return (digit - 38).try_into().unwrap();
+        digit - 38
     } else {
-        return (digit - 96).try_into().unwrap();
+        digit - 96
     }
 }
 
-fn get_badge(rucksacks: &[String]) -> char {
-    let mut rucksacks: Vec<String> = rucksacks.clone().into();
-    rucksacks.sort_by(|a, b| a.len().cmp(&b.len()));
+fn get_badge(mut rucksacks: Vec<String>) -> char {
+    rucksacks.sort_by_key(|a| a.len());
     let sack_2: HashSet<char> = rucksacks[1].chars().collect();
     let sack_3: HashSet<char> = rucksacks[2].chars().collect();
     rucksacks[0]
@@ -40,7 +39,7 @@ fn get_total_priorities(input: Vec<String>) -> usize {
 fn get_total_badge_priorities(input: Vec<String>) -> usize {
     input
         .chunks(3)
-        .map(|rss| get_priority(get_badge(rss)))
+        .map(|rss| get_priority(get_badge(rss.to_vec())))
         .sum()
 }
 

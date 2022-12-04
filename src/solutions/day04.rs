@@ -2,9 +2,9 @@
 
 use crate::utils::read::read_lines;
 
-fn parse_ranges(inp: &String) -> [[usize; 2]; 2] {
-    let mut iter = inp.split(",").map(|r| {
-        let mut parts = r.split("-");
+fn parse_ranges(inp: &str) -> [[usize; 2]; 2] {
+    let mut iter = inp.split(',').map(|r| {
+        let mut parts = r.split('-');
         [
             parts.next().unwrap().parse::<usize>().unwrap(),
             parts.next().unwrap().parse::<usize>().unwrap(),

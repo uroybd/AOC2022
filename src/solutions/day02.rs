@@ -6,7 +6,8 @@ fn score_from_string(s: &str) -> usize {
     match s {
         "A" | "X" => 1,
         "B" | "Y" => 2,
-        _ => 3,
+        "C" | "Z" => 3,
+        _ => unreachable!(),
     }
 }
 
@@ -16,35 +17,36 @@ fn get_score(opponent: usize, me: usize) -> usize {
     }
     let winning_move = (opponent % 3) + 1;
     if me == winning_move {
-        return 6 + me;
+        6 + me
     } else {
-        return me;
+        me
     }
 }
 
-fn get_game_score(rounds: &Vec<String>) -> usize {
+fn get_game_score(rounds: &[String]) -> usize {
     rounds
         .iter()
         .map(|r| {
-            let entries: Vec<&str> = r.split(" ").collect();
+            let entries: Vec<&str> = r.split(' ').collect();
             get_score(score_from_string(entries[0]), score_from_string(entries[1]))
         })
         .sum()
 }
 
 fn get_score_following_strategy(opponent: usize, strategy: &str) -> usize {
-    return match strategy {
+    match strategy {
         "X" => ((opponent + 1) % 3) + 1,
         "Y" => 3 + opponent,
-        _ => 6 + (opponent % 3) + 1,
-    };
+        "Z" => 6 + (opponent % 3) + 1,
+        _ => unreachable!(),
+    }
 }
 
-fn get_game_score_following_strategy(rounds: &Vec<String>) -> usize {
+fn get_game_score_following_strategy(rounds: &[String]) -> usize {
     rounds
         .iter()
         .map(|r| {
-            let entries: Vec<&str> = r.split(" ").collect();
+            let entries: Vec<&str> = r.split(' ').collect();
             get_score_following_strategy(score_from_string(entries[0]), entries[1])
         })
         .sum()
