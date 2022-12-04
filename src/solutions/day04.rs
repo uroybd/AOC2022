@@ -2,19 +2,18 @@
 
 use crate::utils::read::read_lines;
 
-fn parse_ranges(inp: &String) -> Vec<[usize; 2]> {
-    inp.split(",")
-        .map(|r| {
-            let mut parts = r.split("-");
-            [
-                parts.next().unwrap().parse::<usize>().unwrap(),
-                parts.next().unwrap().parse::<usize>().unwrap(),
-            ]
-        })
-        .collect()
+fn parse_ranges(inp: &String) -> [[usize; 2]; 2] {
+    let mut iter = inp.split(",").map(|r| {
+        let mut parts = r.split("-");
+        [
+            parts.next().unwrap().parse::<usize>().unwrap(),
+            parts.next().unwrap().parse::<usize>().unwrap(),
+        ]
+    });
+    [iter.next().unwrap(), iter.next().unwrap()]
 }
 
-fn are_contained(pair: Vec<[usize; 2]>) -> bool {
+fn are_contained(pair: [[usize; 2]; 2]) -> bool {
     if pair[0][0] <= pair[1][0] && pair[0][1] >= pair[1][1] {
         return true;
     }
@@ -24,7 +23,7 @@ fn are_contained(pair: Vec<[usize; 2]>) -> bool {
     false
 }
 
-fn are_overlapping(pair: Vec<[usize; 2]>) -> bool {
+fn are_overlapping(pair: [[usize; 2]; 2]) -> bool {
     if pair[0][1] >= pair[1][0] && pair[1][1] >= pair[0][0] {
         return true;
     }
