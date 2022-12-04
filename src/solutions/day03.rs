@@ -13,8 +13,8 @@ fn get_common(rucksack: &String) -> char {
         .expect("No common items")
 }
 
-fn get_priority(item: char) -> u32 {
-    let digit = item as u32;
+fn get_priority(item: char) -> usize {
+    let digit = item as usize;
     if digit < 91 {
         return (digit - 38).try_into().unwrap();
     } else {
@@ -33,23 +33,23 @@ fn get_badge(rucksacks: &[String]) -> char {
         .expect("No common items")
 }
 
-fn get_total_priorities(input: Vec<String>) -> u32 {
+fn get_total_priorities(input: Vec<String>) -> usize {
     input.iter().map(|r| get_priority(get_common(r))).sum()
 }
 
-fn get_total_badge_priorities(input: Vec<String>) -> u32 {
+fn get_total_badge_priorities(input: Vec<String>) -> usize {
     input
         .chunks(3)
         .map(|rss| get_priority(get_badge(rss)))
         .sum()
 }
 
-pub fn solution_day_03_01(file_path: String) -> Option<u32> {
+pub fn solution_day_03_01(file_path: String) -> Option<usize> {
     let input = read_lines(file_path);
     Some(get_total_priorities(input))
 }
 
-pub fn solution_day_03_02(file_path: String) -> Option<u32> {
+pub fn solution_day_03_02(file_path: String) -> Option<usize> {
     let input = read_lines(file_path);
     Some(get_total_badge_priorities(input))
 }

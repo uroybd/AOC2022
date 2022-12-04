@@ -11,11 +11,11 @@ use std::{
 const MODULE_TEMPLATE: &str = r###"// Advent of Code 2022 - Day DAY
 
 
-pub fn solution_day_DAY_01(file_path: String) -> Option<u32> {
+pub fn solution_day_DAY_01(file_path: String) -> Option<usize> {
     None
 }
 
-pub fn solution_day_DAY_02(file_path: String) -> Option<u32> {
+pub fn solution_day_DAY_02(file_path: String) -> Option<usize> {
     None
 }
 

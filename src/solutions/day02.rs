@@ -2,7 +2,7 @@
 
 use crate::utils::read::read_lines;
 
-fn score_from_string(s: &str) -> u32 {
+fn score_from_string(s: &str) -> usize {
     match s {
         "A" | "X" => 1,
         "B" | "Y" => 2,
@@ -10,7 +10,7 @@ fn score_from_string(s: &str) -> u32 {
     }
 }
 
-fn get_score(opponent: u32, me: u32) -> u32 {
+fn get_score(opponent: usize, me: usize) -> usize {
     if me == opponent {
         return 3 + me;
     }
@@ -22,7 +22,7 @@ fn get_score(opponent: u32, me: u32) -> u32 {
     }
 }
 
-fn get_game_score(rounds: &Vec<String>) -> u32 {
+fn get_game_score(rounds: &Vec<String>) -> usize {
     rounds
         .iter()
         .map(|r| {
@@ -32,7 +32,7 @@ fn get_game_score(rounds: &Vec<String>) -> u32 {
         .sum()
 }
 
-fn get_score_following_strategy(opponent: u32, strategy: &str) -> u32 {
+fn get_score_following_strategy(opponent: usize, strategy: &str) -> usize {
     return match strategy {
         "X" => ((opponent + 1) % 3) + 1,
         "Y" => 3 + opponent,
@@ -40,7 +40,7 @@ fn get_score_following_strategy(opponent: u32, strategy: &str) -> u32 {
     };
 }
 
-fn get_game_score_following_strategy(rounds: &Vec<String>) -> u32 {
+fn get_game_score_following_strategy(rounds: &Vec<String>) -> usize {
     rounds
         .iter()
         .map(|r| {
@@ -50,12 +50,12 @@ fn get_game_score_following_strategy(rounds: &Vec<String>) -> u32 {
         .sum()
 }
 
-pub fn solution_day_02_01(file_path: String) -> Option<u32> {
+pub fn solution_day_02_01(file_path: String) -> Option<usize> {
     let input = read_lines(file_path);
     Some(get_game_score(&input))
 }
 
-pub fn solution_day_02_02(file_path: String) -> Option<u32> {
+pub fn solution_day_02_02(file_path: String) -> Option<usize> {
     let input = read_lines(file_path);
     Some(get_game_score_following_strategy(&input))
 }

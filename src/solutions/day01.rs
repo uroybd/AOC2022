@@ -2,13 +2,13 @@
 
 use std::fs;
 
-fn get_calorie_counts(input: String) -> Vec<u32> {
-    let mut calories: Vec<u32> = input
+fn get_calorie_counts(input: String) -> Vec<usize> {
+    let mut calories: Vec<usize> = input
         .trim()
         .split("\n\n")
         .map(|inv| {
             inv.split("\n")
-                .map(|item| item.parse::<u32>().unwrap())
+                .map(|item| item.parse::<usize>().unwrap())
                 .sum()
         })
         .collect();
@@ -17,16 +17,16 @@ fn get_calorie_counts(input: String) -> Vec<u32> {
     calories
 }
 
-fn get_top_n(calories: &Vec<u32>, count: usize) -> u32 {
+fn get_top_n(calories: &Vec<usize>, count: usize) -> usize {
     return calories.iter().take(count).sum();
 }
 
-pub fn solution_day_01_01(file_path: String) -> Option<u32> {
+pub fn solution_day_01_01(file_path: String) -> Option<usize> {
     let input = get_calorie_counts(fs::read_to_string(file_path).unwrap());
     Some(get_top_n(&input, 1))
 }
 
-pub fn solution_day_01_02(file_path: String) -> Option<u32> {
+pub fn solution_day_01_02(file_path: String) -> Option<usize> {
     let input = get_calorie_counts(fs::read_to_string(file_path).unwrap());
     Some(get_top_n(&input, 3))
 }
