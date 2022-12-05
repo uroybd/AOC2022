@@ -39,12 +39,10 @@ fn parse_input(inp: &str) -> (Vec<Vec<char>>, Vec<Instruction>) {
     let (columns, stacks_data) = stacks_data.split_last().unwrap();
     let columns_count = columns.split("   ").count();
     let mut stacks = vec![vec![]; columns_count];
-    for (index, stack) in stacks.iter_mut().enumerate() {
-        let pos = 1 + (index * 4);
-        for line in stacks_data {
-            let item = line.chars().nth(pos).unwrap();
+    for line in stacks_data {
+        for (idx, item) in line[1..].chars().step_by(4).enumerate() {
             if item != ' ' {
-                stack.push(item);
+                stacks[idx].push(item)
             }
         }
     }
