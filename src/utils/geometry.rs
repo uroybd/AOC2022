@@ -17,7 +17,7 @@ impl Point {
     }
 
     pub fn get_hash_key(&self) -> String {
-        return format!("{}x{}", self.x, self.y);
+        format!("{}x{}", self.x, self.y)
     }
 }
 
@@ -28,7 +28,7 @@ pub struct Line {
 }
 
 impl Line {
-    pub fn from_arrowed_pair(data_string: &String) -> Line {
+    pub fn from_arrowed_pair(data_string: &str) -> Line {
         let mut pair: Vec<Point> = data_string
             .split(" -> ")
             .map(|x| Point::from_comma_separated(x.to_string()))
