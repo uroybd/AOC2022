@@ -15,8 +15,7 @@ fn get_score(opponent: usize, me: usize) -> usize {
     if me == opponent {
         return 3 + me;
     }
-    let winning_move = (opponent % 3) + 1;
-    if me == winning_move {
+    if me == (opponent % 3) + 1 {
         6 + me
     } else {
         me
