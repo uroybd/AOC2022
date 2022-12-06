@@ -3,12 +3,11 @@
 use std::{collections::HashSet, fs};
 
 fn detect_distinct(inp: &str, amount: usize) -> Option<usize> {
-    let data: Vec<char> = inp.chars().collect();
-    for index in 0..data.len() - amount {
+    for index in 0..inp.len() - amount {
         if amount
-            == data[index..index + amount]
-                .iter()
-                .collect::<HashSet<&char>>()
+            == inp[index..index + amount]
+                .chars()
+                .collect::<HashSet<char>>()
                 .len()
         {
             return Some(index + amount);
