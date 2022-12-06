@@ -30,8 +30,6 @@ mod tests {
 
     #[test]
     fn test_detect_distinct() {
-        // let file_path: String = String::from("src/inputs/day06e.txt");
-        // let result = solution_day_06_01(file_path).unwrap();
         let inp1 = "bvwbjplbgvbhsrlpgdmjqwftvncz".to_string();
         let inp2 = "nppdvjthqldpwncqszvftbrmjlhg".to_string();
         let inp3 = "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg".to_string();
