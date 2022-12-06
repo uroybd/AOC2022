@@ -1,6 +1,6 @@
 // Advent of Code 2022 - Day 06
 
-use std::{collections::HashSet, fs};
+use std::fs;
 
 fn detect_distinct(inp: &str, amount: usize) -> Option<usize> {
     let binding = inp.chars().collect::<Vec<char>>();
