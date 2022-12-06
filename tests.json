@@ -1,0 +1,22 @@
+{ "type": "suite", "event": "started", "test_count": 10 }
+{ "type": "test", "event": "started", "name": "solutions::day02::tests::output_day_02_01" }
+{ "type": "test", "event": "started", "name": "solutions::day02::tests::output_day_02_02" }
+{ "type": "test", "event": "started", "name": "solutions::day03::tests::output_day_03_01" }
+{ "type": "test", "event": "started", "name": "solutions::day03::tests::output_day_03_02" }
+{ "type": "test", "event": "started", "name": "solutions::day04::tests::output_day_04_01" }
+{ "type": "test", "event": "started", "name": "solutions::day04::tests::output_day_04_02" }
+{ "type": "test", "event": "started", "name": "solutions::day05::tests::output_day_05_01" }
+{ "type": "test", "event": "started", "name": "solutions::day05::tests::output_day_05_02" }
+{ "type": "test", "name": "solutions::day05::tests::output_day_05_02", "event": "ok", "exec_time": 0.00211575 }
+{ "type": "test", "event": "started", "name": "solutions::day06::tests::output_day_06_01" }
+{ "type": "test", "name": "solutions::day04::tests::output_day_04_02", "event": "ok", "exec_time": 0.00237325 }
+{ "type": "test", "event": "started", "name": "solutions::day06::tests::output_day_06_02" }
+{ "type": "test", "name": "solutions::day02::tests::output_day_02_01", "event": "ok", "exec_time": 0.003802083 }
+{ "type": "test", "name": "solutions::day03::tests::output_day_03_01", "event": "ok", "exec_time": 0.003867958 }
+{ "type": "test", "name": "solutions::day04::tests::output_day_04_01", "event": "ok", "exec_time": 0.003834458 }
+{ "type": "test", "name": "solutions::day05::tests::output_day_05_01", "event": "ok", "exec_time": 0.00383025 }
+{ "type": "test", "name": "solutions::day02::tests::output_day_02_02", "event": "ok", "exec_time": 0.004291875 }
+{ "type": "test", "name": "solutions::day03::tests::output_day_03_02", "event": "ok", "exec_time": 0.00760375 }
+{ "type": "test", "name": "solutions::day06::tests::output_day_06_01", "event": "ok", "exec_time": 0.004417583 }
+{ "type": "test", "name": "solutions::day06::tests::output_day_06_02", "event": "ok", "exec_time": 0.020275916 }
+{ "type": "suite", "event": "ok", "passed": 10, "failed": 0, "ignored": 0, "measured": 0, "filtered_out": 13, "exec_time": 0.024982 }
