@@ -3,14 +3,9 @@
 use std::{collections::HashSet, fs};
 
 fn detect_distinct(inp: &str, amount: usize) -> Option<usize> {
-    for index in 0..inp.len() - amount {
-        if amount
-            == inp[index..index + amount]
-                .chars()
-                .collect::<HashSet<char>>()
-                .len()
-        {
-            return Some(index + amount);
+    for i in 0..inp.len() - amount {
+        if amount == inp[i..i + amount].chars().collect::<HashSet<char>>().len() {
+            return Some(i + amount);
         }
     }
     None
