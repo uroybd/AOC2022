@@ -50,24 +50,24 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn output_day_01_01() {
         let file_path: String = String::from("src/inputs/day01.txt");
 
         let result = solution_day_01_01(file_path);
 
-        println!("{:?}", result.unwrap());
+        dbg!(result.unwrap());
         assert_eq!(1, 1);
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn output_day_01_02() {
         let file_path: String = String::from("src/inputs/day01.txt");
 
         let result = solution_day_01_02(file_path);
 
-        println!("{:?}", result.unwrap());
+        dbg!(result.unwrap());
         assert_eq!(1, 1);
     }
 }

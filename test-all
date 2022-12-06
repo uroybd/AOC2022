@@ -1,0 +1,7 @@
+#!/bin/sh
+cargo test -j 1 --lib -r output_day -- -Zunstable-options --report-time --format json > tests.json
+markdown-test-report -nvpd tests.json
+cat README_main.md > README.md
+cat tests.md | sed '/^<!--more-->$/d' | sed '/^\# Index$/d' | sed 's/\# /\#\# /g' >> README.md
+rm tests.json tests.md
+git add README.md

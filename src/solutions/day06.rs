@@ -36,20 +36,20 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn output_day_06_01() {
         let file_path: String = String::from("src/inputs/day06.txt");
         let result = solution_day_06_01(file_path);
-        println!("{:?}", result.unwrap());
+        dbg!(result.unwrap());
         assert_eq!(1, 1);
     }
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn output_day_06_02() {
         let file_path: String = String::from("src/inputs/day06.txt");
         let result = solution_day_06_02(file_path);
-        println!("{:?}", result.unwrap());
+        dbg!(result.unwrap());
         assert_eq!(1, 1);
     }
 }
