@@ -5,3 +5,6 @@ version = "0.1.0"
 
 [dependencies]
 pico-args = "0.5.0"
+
+[profile.test]
+opt-level = 2
