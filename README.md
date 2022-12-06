@@ -9,73 +9,73 @@ Shamelessly stole and adapted [the scaffolding mechanism found here](https://git
 ## Tests and Timings
 | | Total | Passed | Failed | Ignored | Filtered | Duration |
 | --- | ----- | -------| ------ | ------- | -------- | -------- |
-| ✅ | 12 | 12 | 0 | 0 | 11 | 774.083µs |
+| ✅ | 12 | 12 | 0 | 0 | 11 | 1.899166ms |
 
 
 
 
 | Name | Result | Duration |
 | ---- | ------ | -------- |
-| [solutions::day01::tests::output_day_01_01](#solutionsday01testsoutput_day_01_01) | ✅ | 84.75µs | 
-| [solutions::day01::tests::output_day_01_02](#solutionsday01testsoutput_day_01_02) | ✅ | 106.333µs | 
-| [solutions::day04::tests::output_day_04_02](#solutionsday04testsoutput_day_04_02) | ✅ | 156.583µs | 
-| [solutions::day04::tests::output_day_04_01](#solutionsday04testsoutput_day_04_01) | ✅ | 175.75µs | 
-| [solutions::day02::tests::output_day_02_01](#solutionsday02testsoutput_day_02_01) | ✅ | 371.083µs | 
-| [solutions::day02::tests::output_day_02_02](#solutionsday02testsoutput_day_02_02) | ✅ | 347.666µs | 
-| [solutions::day03::tests::output_day_03_01](#solutionsday03testsoutput_day_03_01) | ✅ | 303.25µs | 
-| [solutions::day03::tests::output_day_03_02](#solutionsday03testsoutput_day_03_02) | ✅ | 390.25µs | 
-| [solutions::day06::tests::output_day_06_01](#solutionsday06testsoutput_day_06_01) | ✅ | 39.625µs | 
-| [solutions::day05::tests::output_day_05_02](#solutionsday05testsoutput_day_05_02) | ✅ | 177.875µs | 
-| [solutions::day05::tests::output_day_05_01](#solutionsday05testsoutput_day_05_01) | ✅ | 378.666µs | 
-| [solutions::day06::tests::output_day_06_02](#solutionsday06testsoutput_day_06_02) | ✅ | 51.541µs | 
+| [solutions::day01::tests::output_day_01_01](#solutionsday01testsoutput_day_01_01) | ✅ | 62.333µs | 
+| [solutions::day01::tests::output_day_01_02](#solutionsday01testsoutput_day_01_02) | ✅ | 50.041µs | 
+| [solutions::day02::tests::output_day_02_01](#solutionsday02testsoutput_day_02_01) | ✅ | 270.291µs | 
+| [solutions::day02::tests::output_day_02_02](#solutionsday02testsoutput_day_02_02) | ✅ | 262.875µs | 
+| [solutions::day03::tests::output_day_03_01](#solutionsday03testsoutput_day_03_01) | ✅ | 211.458µs | 
+| [solutions::day03::tests::output_day_03_02](#solutionsday03testsoutput_day_03_02) | ✅ | 267.166µs | 
+| [solutions::day04::tests::output_day_04_01](#solutionsday04testsoutput_day_04_01) | ✅ | 123.041µs | 
+| [solutions::day04::tests::output_day_04_02](#solutionsday04testsoutput_day_04_02) | ✅ | 108µs | 
+| [solutions::day05::tests::output_day_05_01](#solutionsday05testsoutput_day_05_01) | ✅ | 143.375µs | 
+| [solutions::day05::tests::output_day_05_02](#solutionsday05testsoutput_day_05_02) | ✅ | 135.125µs | 
+| [solutions::day06::tests::output_day_06_01](#solutionsday06testsoutput_day_06_01) | ✅ | 24.625µs | 
+| [solutions::day06::tests::output_day_06_02](#solutionsday06testsoutput_day_06_02) | ✅ | 40.916µs | 
 
 
 ## Details
 
 ### ✅ solutions::day01::tests::output_day_01_01
 
-**Duration**: 84.75µs
+**Duration**: 62.333µs
 
 ### ✅ solutions::day01::tests::output_day_01_02
 
-**Duration**: 106.333µs
-
-### ✅ solutions::day04::tests::output_day_04_02
-
-**Duration**: 156.583µs
-
-### ✅ solutions::day04::tests::output_day_04_01
-
-**Duration**: 175.75µs
+**Duration**: 50.041µs
 
 ### ✅ solutions::day02::tests::output_day_02_01
 
-**Duration**: 371.083µs
+**Duration**: 270.291µs
 
 ### ✅ solutions::day02::tests::output_day_02_02
 
-**Duration**: 347.666µs
+**Duration**: 262.875µs
 
 ### ✅ solutions::day03::tests::output_day_03_01
 
-**Duration**: 303.25µs
+**Duration**: 211.458µs
 
 ### ✅ solutions::day03::tests::output_day_03_02
 
-**Duration**: 390.25µs
+**Duration**: 267.166µs
 
-### ✅ solutions::day06::tests::output_day_06_01
+### ✅ solutions::day04::tests::output_day_04_01
 
-**Duration**: 39.625µs
+**Duration**: 123.041µs
 
-### ✅ solutions::day05::tests::output_day_05_02
+### ✅ solutions::day04::tests::output_day_04_02
 
-**Duration**: 177.875µs
+**Duration**: 108µs
 
 ### ✅ solutions::day05::tests::output_day_05_01
 
-**Duration**: 378.666µs
+**Duration**: 143.375µs
+
+### ✅ solutions::day05::tests::output_day_05_02
+
+**Duration**: 135.125µs
+
+### ✅ solutions::day06::tests::output_day_06_01
+
+**Duration**: 24.625µs
 
 ### ✅ solutions::day06::tests::output_day_06_02
 
-**Duration**: 51.541µs
+**Duration**: 40.916µs
