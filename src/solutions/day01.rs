@@ -50,6 +50,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn output_day_01_01() {
         let file_path: String = String::from("src/inputs/day01.txt");
 
@@ -60,6 +61,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn output_day_01_02() {
         let file_path: String = String::from("src/inputs/day01.txt");
 
