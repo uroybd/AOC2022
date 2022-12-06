@@ -3,12 +3,12 @@
 use std::{collections::HashSet, fs};
 
 fn detect_distinct(inp: &str, amount: usize) -> Option<usize> {
-    for i in 0..inp.len() - amount {
-        if amount == inp[i..i + amount].chars().collect::<HashSet<char>>().len() {
-            return Some(i + amount);
-        }
-    }
-    None
+    let binding = inp.chars().collect::<Vec<char>>();
+    let result = binding
+        .windows(amount)
+        .enumerate()
+        .find(|(_, slice)| !(1..amount).any(|i| slice[i..].contains(&slice[i - 1])));
+    result.map(|(idx, _)| idx + amount)
 }
 
 pub fn solution_day_06_01(file_path: String) -> Option<usize> {
