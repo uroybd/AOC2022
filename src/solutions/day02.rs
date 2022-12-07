@@ -80,7 +80,7 @@ mod tests {
     }
 
     #[test]
-    // #[ignore]
+    #[ignore]
     fn output_day_02_01() {
         let file_path: String = String::from("src/inputs/day02.txt");
 
@@ -91,7 +91,7 @@ mod tests {
     }
 
     #[test]
-    // #[ignore]
+    #[ignore]
     fn output_day_02_02() {
         let file_path: String = String::from("src/inputs/day02.txt");
 

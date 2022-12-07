@@ -6,76 +6,29 @@ Every day has a dedicated file in the `solutions` directory, and two inputs (one
 
 Shamelessly stole and adapted [the scaffolding mechanism found here](https://github.com/fspoettel/advent-of-code-rust) to my need.
 
-## Tests and Timings
-| | Total | Passed | Failed | Ignored | Filtered | Duration |
-| --- | ----- | -------| ------ | ------- | -------- | -------- |
-| ✅ | 12 | 12 | 0 | 0 | 11 | 1.622ms |
+## Benchmarks
 
+### Table of Contents
 
+- [Advent of Code 2022 Solutions](#advent-of-code-2022-solutions)
+  - [Benchmarks](#benchmarks)
+    - [Table of Contents](#table-of-contents)
+    - [Benchmark Results](#benchmark-results)
+      - [Solutions](#solutions)
 
+### Benchmark Results
 
-| Name | Result | Duration |
-| ---- | ------ | -------- |
-| [solutions::day01::tests::output_day_01_01](#solutionsday01testsoutput_day_01_01) | ✅ | 66.666µs | 
-| [solutions::day01::tests::output_day_01_02](#solutionsday01testsoutput_day_01_02) | ✅ | 52.666µs | 
-| [solutions::day02::tests::output_day_02_01](#solutionsday02testsoutput_day_02_01) | ✅ | 214.416µs | 
-| [solutions::day02::tests::output_day_02_02](#solutionsday02testsoutput_day_02_02) | ✅ | 190.458µs | 
-| [solutions::day03::tests::output_day_03_01](#solutionsday03testsoutput_day_03_01) | ✅ | 176.416µs | 
-| [solutions::day03::tests::output_day_03_02](#solutionsday03testsoutput_day_03_02) | ✅ | 242.75µs | 
-| [solutions::day04::tests::output_day_04_01](#solutionsday04testsoutput_day_04_01) | ✅ | 97.041µs | 
-| [solutions::day04::tests::output_day_04_02](#solutionsday04testsoutput_day_04_02) | ✅ | 81.083µs | 
-| [solutions::day05::tests::output_day_05_01](#solutionsday05testsoutput_day_05_01) | ✅ | 115.75µs | 
-| [solutions::day05::tests::output_day_05_02](#solutionsday05testsoutput_day_05_02) | ✅ | 108.583µs | 
-| [solutions::day06::tests::output_day_06_01](#solutionsday06testsoutput_day_06_01) | ✅ | 28.5µs | 
-| [solutions::day06::tests::output_day_06_02](#solutionsday06testsoutput_day_06_02) | ✅ | 43.333µs | 
+#### Solutions
 
+|              | `Part 01`                 | `Part 02`                         |
+|:-------------|:--------------------------|:--------------------------------- |
+| **`Day 01`** | `42.77 us` (✅ **1.00x**)  | `42.80 us` (✅ **1.00x slower**)   |
+| **`Day 02`** | `260.43 us` (✅ **1.00x**) | `252.10 us` (✅ **1.03x faster**)  |
+| **`Day 03`** | `172.40 us` (✅ **1.00x**) | `241.60 us` (❌ *1.40x slower*)    |
+| **`Day 04`** | `110.45 us` (✅ **1.00x**) | `103.85 us` (✅ **1.06x faster**)  |
+| **`Day 05`** | `117.01 us` (✅ **1.00x**) | `116.62 us` (✅ **1.00x faster**)  |
+| **`Day 06`** | `16.32 us` (✅ **1.00x**)  | `29.44 us` (❌ *1.80x slower*)     |
 
-## Details
+---
+Made with [criterion-table](https://github.com/nu11ptr/criterion-table)
 
-### ✅ solutions::day01::tests::output_day_01_01
-
-**Duration**: 66.666µs
-
-### ✅ solutions::day01::tests::output_day_01_02
-
-**Duration**: 52.666µs
-
-### ✅ solutions::day02::tests::output_day_02_01
-
-**Duration**: 214.416µs
-
-### ✅ solutions::day02::tests::output_day_02_02
-
-**Duration**: 190.458µs
-
-### ✅ solutions::day03::tests::output_day_03_01
-
-**Duration**: 176.416µs
-
-### ✅ solutions::day03::tests::output_day_03_02
-
-**Duration**: 242.75µs
-
-### ✅ solutions::day04::tests::output_day_04_01
-
-**Duration**: 97.041µs
-
-### ✅ solutions::day04::tests::output_day_04_02
-
-**Duration**: 81.083µs
-
-### ✅ solutions::day05::tests::output_day_05_01
-
-**Duration**: 115.75µs
-
-### ✅ solutions::day05::tests::output_day_05_02
-
-**Duration**: 108.583µs
-
-### ✅ solutions::day06::tests::output_day_06_01
-
-**Duration**: 28.5µs
-
-### ✅ solutions::day06::tests::output_day_06_02
-
-**Duration**: 43.333µs

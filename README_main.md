@@ -6,4 +6,4 @@ Every day has a dedicated file in the `solutions` directory, and two inputs (one
 
 Shamelessly stole and adapted [the scaffolding mechanism found here](https://github.com/fspoettel/advent-of-code-rust) to my need.
 
-## Tests and Timings
+

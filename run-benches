@@ -1,0 +1,5 @@
+#!/bin/sh
+cargo criterion --message-format=json | criterion-table >  benches.md
+cat README_main.md > README.md
+cat benches.md | sed 's/\# /\#\# /g' >> README.md
+rm benches.md
