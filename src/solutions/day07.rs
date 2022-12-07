@@ -81,7 +81,7 @@ fn calculate_total_size(dir_map: &HashMap<String, Directory>, dirname: String) -
 fn get_all_dir_sizes(dir_map: &HashMap<String, Directory>) -> Vec<usize> {
     dir_map
         .keys()
-        .filter_map(|key| calculate_total_size(&dir_map, key.to_string()))
+        .filter_map(|key| calculate_total_size(dir_map, key.to_string()))
         .collect()
 }
 
