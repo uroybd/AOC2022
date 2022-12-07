@@ -11,13 +11,13 @@ Shamelessly stole and adapted [the scaffolding mechanism found here](https://git
 
 |              | Part 01                 | Part 02                         |
 |:-------------|:--------------------------|:--------------------------------- |
-| **Day 01** | 42.89 μs   | 42.93 μs    |
-| **Day 02** | 258.85 μs  | 252.88 μs   |
-| **Day 03** | 203.97 μs  | 285.30 μs     |
-| **Day 04** | 110.92 μs  | 105.05 μs   |
-| **Day 05** | 116.48 μs  | 118.59 μs   |
-| **Day 06** | 16.44 μs   | 29.40 μs      |
-| **Day 07** | 4.23 ms    | 4.29 ms     |
+| **Day 01** | 42.68 μs   | 43.58 μs    |
+| **Day 02** | 259.99 μs  | 250.65 μs   |
+| **Day 03** | 204.79 μs  | 282.43 μs     |
+| **Day 04** | 111.52 μs  | 104.46 μs   |
+| **Day 05** | 116.53 μs  | 116.98 μs   |
+| **Day 06** | 16.38 μs   | 29.50 μs      |
+| **Day 07** | 186.66 μs  | 186.92 μs   |
 
 ---
 Made with [criterion-table](https://github.com/nu11ptr/criterion-table)
