@@ -4,6 +4,7 @@ use aoc_2022::solutions::day03::{solution_day_03_01, solution_day_03_02};
 use aoc_2022::solutions::day04::{solution_day_04_01, solution_day_04_02};
 use aoc_2022::solutions::day05::{solution_day_05_01, solution_day_05_02};
 use aoc_2022::solutions::day06::{solution_day_06_01, solution_day_06_02};
+use aoc_2022::solutions::day07::{solution_day_07_01, solution_day_07_02};
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 fn all_solutions(c: &mut Criterion) {
@@ -62,15 +63,20 @@ fn all_solutions(c: &mut Criterion) {
     g.bench_function("Part 02/Day 06", |b| {
         b.iter(|| solution_day_06_02(black_box(file_path.clone())))
     });
+
+    // Day 07
+    let file_path: String = String::from("src/inputs/day07.txt");
+    g.bench_function("Part 01/Day 07", |b| {
+        b.iter(|| solution_day_07_01(black_box(file_path.clone())))
+    });
+    g.bench_function("Part 02/Day 07", |b| {
+        b.iter(|| solution_day_07_02(black_box(file_path.clone())))
+    });
 }
 
-
 // fn day_02(c: &mut Criterion) {
-    
+
 // }
-
-
-
 
 criterion_group!(solutions, all_solutions);
 criterion_main!(solutions);
