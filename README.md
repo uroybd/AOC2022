@@ -11,22 +11,25 @@ Shamelessly stole and adapted [the scaffolding mechanism found here](https://git
 
 ### Table of Contents
 
-- [Benchmark Results](#benchmark-results)
-    - [Solutions](#solutions)
+- [Advent of Code 2022 Solutions](#advent-of-code-2022-solutions)
+  - [Benchmarks](#benchmarks)
+    - [Table of Contents](#table-of-contents)
+    - [Benchmark Results](#benchmark-results)
+      - [Solutions](#solutions)
 
 ### Benchmark Results
 
 #### Solutions
 
-             `Part 01`                 `Part 02`                         |
+|              | Part 01                 | Part 02                         |
 |:-------------|:--------------------------|:--------------------------------- |
-**`Day 01`** `42.89 us` (**1.00x**)  `43.42 us` (**1.01x slower**)   |
-**`Day 02`** `259.37 us` (**1.00x**) `251.52 us` (**1.03x faster**)  |
-**`Day 03`** `207.90 us` (**1.00x**) `283.56 us` (*1.36x slower*)    |
-**`Day 04`** `110.05 us` (**1.00x**) `104.09 us` (**1.06x faster**)  |
-**`Day 05`** `114.57 us` (**1.00x**) `120.04 us` (**1.05x slower**)  |
-**`Day 06`** `16.38 us` (**1.00x**)  `29.80 us` (*1.82x slower*)     |
-**`Day 07`** `4.27 ms` (**1.00x**)   `4.24 ms` (**1.01x faster**)    |
+| **Day 01** | 43.06 μs  | 42.94 μs (**1.00x faster**)   |
+| **Day 02** | 257.00 μs | 250.77 μs (**1.02x faster**)  |
+| **Day 03** | 207.98 μs | 288.11 μs (*1.39x slower*)    |
+| **Day 04** | 110.04 μs | 104.25 μs (**1.06x faster**)  |
+| **Day 05** | 115.64 μs | 116.19 μs (**1.00x slower**)  |
+| **Day 06** | 16.39 μs  | 29.93 μs (*1.83x slower*)     |
+| **Day 07** | 4.22 ms    | 4.22 ms (**1.00x slower**)    |
 
 ---
 Made with [criterion-table](https://github.com/nu11ptr/criterion-table)
