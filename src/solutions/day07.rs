@@ -17,6 +17,8 @@ impl Directory {
 fn run_commands(input: String) -> HashMap<String, Directory> {
     let mut current_dir: Option<String> = None;
     let mut dir_map: HashMap<String, Directory> = HashMap::new();
+    dir_map.insert("/".to_string(), Directory::new_with_parent(None));
+
     for line in input.lines() {
         if line.starts_with('$') {
             let mut parts = line.split(' ').skip(1);
@@ -32,14 +34,10 @@ fn run_commands(input: String) -> HashMap<String, Directory> {
                         current_dir = new_current_dir;
                     }
                     _ => {
-                        // dbg!(current_dir.clone());
                         let mut key = pwd.to_string();
                         if current_dir.is_some() {
                             key = format!("{}/{}", current_dir.as_ref().unwrap(), pwd);
                         }
-                        dir_map
-                            .entry(key.clone())
-                            .or_insert_with(|| Directory::new_with_parent(current_dir));
                         current_dir = Some(key);
                     }
                 }
@@ -56,7 +54,14 @@ fn run_commands(input: String) -> HashMap<String, Directory> {
                 }
                 size => {
                     let d = dir_map.get_mut(current_dir.as_ref().unwrap()).unwrap();
-                    d.size += size.parse::<usize>().unwrap()
+                    let s = size.parse::<usize>().unwrap();
+                    d.size += s;
+                    let mut dp = d.parent.clone();
+                    while let Some(dp_key) = dp {
+                        let dpt = dir_map.get_mut(&dp_key).unwrap();
+                        dpt.size += s;
+                        dp = dpt.parent.clone();
+                    }
                 }
             }
         }
@@ -79,10 +84,11 @@ fn calculate_total_size(dir_map: &HashMap<String, Directory>, dirname: String) -
 }
 
 fn get_all_dir_sizes(dir_map: &HashMap<String, Directory>) -> Vec<usize> {
-    dir_map
-        .keys()
-        .filter_map(|key| calculate_total_size(dir_map, key.to_string()))
-        .collect()
+    // dir_map
+    //     .keys()
+    //     .filter_map(|key| calculate_total_size(dir_map, key.to_string()))
+    //     .collect()
+    dir_map.values().map(|dir| dir.size).collect()
 }
 
 pub fn solution_day_07_01(file_path: String) -> Option<usize> {
@@ -103,7 +109,7 @@ pub fn solution_day_07_02(file_path: String) -> Option<usize> {
     sizes.sort();
     let (total_size, required_space, used) = (70000000, 30000000, sizes.last().unwrap());
     let to_be_reclaimed = required_space - (total_size - used);
-    sizes.retain(|a| a >= &&to_be_reclaimed);
+    sizes.retain(|a| a >= &to_be_reclaimed);
     Some(*sizes.first().unwrap())
 }
 
