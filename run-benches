@@ -1,5 +1,5 @@
 #!/bin/sh
 cargo criterion --message-format=json | criterion-table >  benches.md
 cat README_main.md > README.md
-cat benches.md | sed 's/[❌✅] //g' | sed 's/us` /μs` /g' | sed 's/\((\*\*1\.00x\*\*\))//g' | sed 's/\# /\#\# /g' | sed 's/\`//g' | sed '2,10d' >> README.md
+cat benches.md | sed 's/[❌✅] //g' | sed 's/us` /μs` /g' | sed --regexp-extended 's/\((\*){1,2}([0-9a-z\. ]+)(\*){1,2}\)//g' | sed 's/\# /\#\# /g' | sed 's/`//g' | sed '2,10d' >> README.md
 rm benches.md
