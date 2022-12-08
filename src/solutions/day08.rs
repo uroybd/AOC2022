@@ -67,8 +67,8 @@ fn largest_scenic_score(trees: &Vec<Vec<usize>>) -> usize {
     largest
 }
 
-pub fn solution_day_08_01(file_path: String) -> Option<usize> {
-    let trees = fs::read_to_string(file_path)
+fn parse_input(file_path: String) -> Vec<Vec<usize>> {
+    fs::read_to_string(file_path)
         .unwrap()
         .trim()
         .lines()
@@ -77,21 +77,16 @@ pub fn solution_day_08_01(file_path: String) -> Option<usize> {
                 .map(|s| s.to_string().parse::<usize>().unwrap())
                 .collect()
         })
-        .collect();
+        .collect()
+}
+
+pub fn solution_day_08_01(file_path: String) -> Option<usize> {
+    let trees = parse_input(file_path);
     Some(get_visible(&trees))
 }
 
 pub fn solution_day_08_02(file_path: String) -> Option<usize> {
-    let trees = fs::read_to_string(file_path)
-        .unwrap()
-        .trim()
-        .lines()
-        .map(|l| {
-            l.chars()
-                .map(|s| s.to_string().parse::<usize>().unwrap())
-                .collect()
-        })
-        .collect();
+    let trees = parse_input(file_path);
     Some(largest_scenic_score(&trees))
 }
 
