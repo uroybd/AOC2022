@@ -8,10 +8,10 @@ fn get_visible(trees: &Vec<Vec<usize>>) -> usize {
     for y in 1..height - 1 {
         for x in 1..width - 1 {
             let current_tree = trees[y][x];
-            if trees[y][0..x].iter().all(|t| t < &current_tree)
-                || trees[y][(x + 1)..].iter().all(|t| t < &current_tree)
-                || (0..y).all(|cy| trees[cy][x] < current_tree)
-                || ((y + 1)..height).all(|cy| trees[cy][x] < current_tree)
+            if !trees[y][0..x].iter().any(|t| t >= &current_tree)
+                || !trees[y][(x + 1)..].iter().any(|t| t >= &current_tree)
+                || !(0..y).any(|cy| trees[cy][x] >= current_tree)
+                || !((y + 1)..height).any(|cy| trees[cy][x] >= current_tree)
             {
                 total += 1;
             }
