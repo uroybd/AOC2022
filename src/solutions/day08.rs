@@ -35,6 +35,9 @@ fn largest_scenic_score(trees: &Vec<Vec<usize>>) -> usize {
                 Some((pos, _)) => pos + 1,
                 None => x,
             };
+            if score_left == 0 {
+                continue;
+            }
             let score_right = match trees[y][(x + 1)..]
                 .iter()
                 .enumerate()
@@ -43,6 +46,9 @@ fn largest_scenic_score(trees: &Vec<Vec<usize>>) -> usize {
                 Some((pos, _)) => pos + 1,
                 None => width - x - 1,
             };
+            if score_right == 0 {
+                continue;
+            }
             let score_top = match (0..y)
                 .rev()
                 .enumerate()
@@ -51,6 +57,9 @@ fn largest_scenic_score(trees: &Vec<Vec<usize>>) -> usize {
                 Some((pos, _)) => pos + 1,
                 None => y,
             };
+            if score_top == 0 {
+                continue;
+            }
             let score_bottom = match ((y + 1)..height)
                 .enumerate()
                 .find(|(_, cy)| trees[*cy][x] >= current_tree)
@@ -58,6 +67,9 @@ fn largest_scenic_score(trees: &Vec<Vec<usize>>) -> usize {
                 Some((pos, _)) => pos + 1,
                 None => height - y - 1,
             };
+            if score_bottom == 0 {
+                continue;
+            }
             let score = score_left * score_right * score_top * score_bottom;
             if score > largest {
                 largest = score
