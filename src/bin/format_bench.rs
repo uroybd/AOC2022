@@ -184,7 +184,6 @@ fn main() {
         .truncate(true)
         .open("README.md")
         .unwrap();
-
     writer.write_all(read_me.as_bytes()).unwrap();
     writer.write_all(TOP_TEMPLATE.as_bytes()).unwrap();
     let mut values: Vec<&Row> = rows.values().collect();
