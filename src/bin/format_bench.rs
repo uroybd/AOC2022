@@ -1,5 +1,6 @@
 use std::{
     collections::HashMap,
+    fs::{self, File, OpenOptions},
     io::{self, BufRead, StdoutLock, Write},
 };
 
@@ -75,7 +76,7 @@ fn format_time(v: &Value) -> String {
     format!("{:.2}{}", value, unit)
 }
 
-fn format_row(r: &Row, writer: &mut StdoutLock) -> Value {
+fn format_row(r: &Row, writer: &mut File) -> Value {
     let mut times = Vec::new();
     let part_1 = match &r.part1 {
         Some(v) => {
@@ -175,8 +176,16 @@ fn main() {
             break;
         }
     }
-    let stdout = io::stdout();
-    let mut writer = stdout.lock();
+    let read_me_content = fs::read_to_string("README.md").unwrap_or("".to_string());
+    let read_me = read_me_content.split("## Benchmarks").next().unwrap();
+    let mut writer = OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open("README.md")
+        .unwrap();
+
+    writer.write_all(read_me.as_bytes()).unwrap();
     writer.write_all(TOP_TEMPLATE.as_bytes()).unwrap();
     let mut values: Vec<&Row> = rows.values().collect();
     values.sort_by(|a, b| a.day.cmp(&b.day));

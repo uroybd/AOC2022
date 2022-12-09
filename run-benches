@@ -1,3 +1,0 @@
-#!/bin/sh
-cat README_main.md > README.md
-cargo criterion --message-format=json | cargo btable >> README.md
