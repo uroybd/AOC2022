@@ -1,7 +1,7 @@
 use std::{
     collections::HashMap,
     fs::{self, File, OpenOptions},
-    io::{self, BufRead, StdoutLock, Write},
+    io::{self, BufRead, Write},
 };
 
 const TOP_TEMPLATE: &str = r###"## Benchmarks
@@ -176,7 +176,7 @@ fn main() {
             break;
         }
     }
-    let read_me_content = fs::read_to_string("README.md").unwrap_or("".to_string());
+    let read_me_content = fs::read_to_string("README.md").unwrap_or_else(|_| "".to_string());
     let read_me = read_me_content.split("## Benchmarks").next().unwrap();
     let mut writer = OpenOptions::new()
         .write(true)

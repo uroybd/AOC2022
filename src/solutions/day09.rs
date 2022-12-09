@@ -20,9 +20,9 @@ impl Coordinate {
         let dy = to.y - self.y;
         if dx.abs() >= 2 || dy.abs() >= 2 {
             self.move_by((
-                if dx != 0 { dx / dx.abs() } else { 0 },
-                if dy != 0 { dy / dy.abs() } else { 0 },
-            ));
+                dx.checked_div(dx.abs()).unwrap_or(0),
+                dy.checked_div(dy.abs()).unwrap_or(0),
+            ))
         }
     }
 }
