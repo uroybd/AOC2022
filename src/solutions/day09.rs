@@ -15,6 +15,17 @@ impl Coordinate {
         self.x += to.0;
         self.y += to.1;
     }
+
+    fn move_close_to(&mut self, to: &Coordinate) {
+        let dx = to.x - self.x;
+        let dy = to.y - self.y;
+        if dx.abs() >= 2 || dy.abs() >= 2 {
+            self.move_by((
+                if dx != 0 { dx / dx.abs() } else { 0 },
+                if dy != 0 { dy / dy.abs() } else { 0 },
+            ));
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -46,15 +57,8 @@ impl Rope {
         let length = self.links.len();
 
         for idx in 1..length {
-            let dx = self.links[idx - 1].x - self.links[idx].x;
-            let dy = self.links[idx - 1].y - self.links[idx].y;
-            if dx.abs() < 2 && dy.abs() < 2 {
-                continue;
-            }
-            self.links[idx].move_by((
-                if dx != 0 { dx / dx.abs() } else { 0 },
-                if dy != 0 { dy / dy.abs() } else { 0 },
-            ));
+            let to = self.links[idx - 1].clone();
+            self.links[idx].move_close_to(&to);
         }
         self.movement_record.insert(self.links[length - 1].clone());
     }
