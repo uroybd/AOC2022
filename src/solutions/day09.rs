@@ -10,6 +10,13 @@ struct Coordinate {
     y: isize,
 }
 
+impl Coordinate {
+    fn move_by(&mut self, to: (isize, isize)) {
+        self.x += to.0;
+        self.y += to.1;
+    }
+}
+
 #[derive(Debug)]
 struct Rope {
     links: Vec<Coordinate>,
@@ -34,23 +41,20 @@ impl Rope {
             "L" => (-1, 0),
             _ => unreachable!(),
         };
-        self.links[0].x += diff.0;
-        self.links[0].y -= diff.1;
+        self.links[0].move_by(diff);
 
         let length = self.links.len();
 
-        for i in 1..length {
-            let dx = self.links[i - 1].x - self.links[i].x;
-            let dy = self.links[i - 1].y - self.links[i].y;
+        for idx in 1..length {
+            let dx = self.links[idx - 1].x - self.links[idx].x;
+            let dy = self.links[idx - 1].y - self.links[idx].y;
             if dx.abs() < 2 && dy.abs() < 2 {
                 continue;
             }
-            if dx != 0 {
-                self.links[i].x += dx / dx.abs();
-            }
-            if dy != 0 {
-                self.links[i].y += dy / dy.abs();
-            }
+            self.links[idx].move_by((
+                if dx != 0 { dx / dx.abs() } else { 0 },
+                if dy != 0 { dy / dy.abs() } else { 0 },
+            ));
         }
         self.movement_record.insert(self.links[length - 1].clone());
     }
