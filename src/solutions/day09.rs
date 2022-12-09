@@ -1,8 +1,7 @@
 // Advent of Code 2022 - Day 09
 
-use std::collections::HashSet;
-
 use crate::utils::read::read_lines;
+use std::collections::HashSet;
 
 #[derive(Debug, PartialEq, Eq, Clone, Hash)]
 struct Coordinate {
@@ -73,10 +72,6 @@ impl Rope {
             self.move_to_direction(direction);
         }
     }
-
-    fn count_visited(&self) -> usize {
-        self.movement_record.len()
-    }
 }
 
 pub fn solution_day_09_01(file_path: String) -> Option<usize> {
@@ -85,7 +80,7 @@ pub fn solution_day_09_01(file_path: String) -> Option<usize> {
     for instruction in instructions.iter() {
         rope.run_instruction(instruction);
     }
-    Some(rope.count_visited())
+    Some(rope.movement_record.len())
 }
 
 pub fn solution_day_09_02(file_path: String) -> Option<usize> {
@@ -94,7 +89,7 @@ pub fn solution_day_09_02(file_path: String) -> Option<usize> {
     for instruction in instructions.iter() {
         rope.run_instruction(instruction);
     }
-    Some(rope.count_visited())
+    Some(rope.movement_record.len())
 }
 
 #[cfg(test)]
