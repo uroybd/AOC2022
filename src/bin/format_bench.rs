@@ -159,7 +159,6 @@ fn main() {
                         }
                     }
                 });
-                // println!("{:?}", row);
                 if part == "Part 01" {
                     row.part1 = Some(Value {
                         value: row_data.value,
