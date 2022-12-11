@@ -94,7 +94,8 @@ mod tests {
     #[ignore]
     fn output_day_10_01() {
         let file_path: String = String::from("src/inputs/day10.txt");
-        let result = solution_day_10_01(file_path);
+        let result = solution_day_10_01(file_path).unwrap();
+        println!("{}", result);
         assert_eq!(1, 1);
     }
 

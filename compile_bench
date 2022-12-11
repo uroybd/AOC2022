@@ -1,4 +1,2 @@
 #!/bin/bash
-cargo criterion --message-format=json > benches.json
-cat benches.json | cargo bench_table
-rm benches.json
+cat bench_results/benches_*.json | cargo bench_table

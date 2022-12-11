@@ -136,8 +136,8 @@ fn main() {
             let b_data = BenchData::from_string(&line_content);
             if let Some(row_data) = b_data {
                 let mut parts = row_data.id.split('/').skip(1);
-                let part = parts.next().unwrap().to_owned();
                 let day = parts.next().unwrap().to_owned();
+                let part = parts.next().unwrap().to_owned();
                 let row = rows.entry(day.clone()).or_insert_with(|| {
                     if part == "Part 01" {
                         Row {
@@ -172,7 +172,7 @@ fn main() {
                 }
             }
         } else {
-            break;
+            continue;
         }
     }
     let read_me_content = fs::read_to_string("README.md").unwrap_or_else(|_| "".to_string());

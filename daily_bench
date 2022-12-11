@@ -1,0 +1,3 @@
+#!/bin/bash
+mkdir -p bench_results
+cargo criterion --message-format=json -- "Day $1" > "bench_results/benches_$1.json"
