@@ -59,30 +59,16 @@ impl Monkey {
             [x, "+"] => WorryOperation::Add(x.parse::<usize>().unwrap()),
             _ => unreachable!(),
         };
-        let devisable_by: usize = ins
-            .next()
-            .unwrap()
-            .split_whitespace()
-            .last()
-            .unwrap()
-            .parse::<usize>()
-            .unwrap();
-        let throw_to_if_true: usize = ins
-            .next()
-            .unwrap()
-            .split_whitespace()
-            .last()
-            .unwrap()
-            .parse::<usize>()
-            .unwrap();
-        let throw_to_if_false: usize = ins
-            .next()
-            .unwrap()
-            .split_whitespace()
-            .last()
-            .unwrap()
-            .parse::<usize>()
-            .unwrap();
+        let mut next_3 = ins.take(3).map(|ins| {
+            ins.split_whitespace()
+                .last()
+                .unwrap()
+                .parse::<usize>()
+                .unwrap()
+        });
+        let devisable_by: usize = next_3.next().unwrap();
+        let throw_to_if_true: usize = next_3.next().unwrap();
+        let throw_to_if_false: usize = next_3.next().unwrap();
         Self {
             inventory,
             operation,
