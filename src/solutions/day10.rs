@@ -19,10 +19,11 @@ impl ClockCircuit {
         }
     }
 
-    fn print_image(&self) {
-        self.image.chunks(40).for_each(|line| {
-            println!("{}", line.join(""));
-        });
+    fn get_image(&self) -> String {
+        self.image
+            .chunks(40)
+            .map(|line| format!("{}\n", line.join("")))
+            .collect()
     }
 
     fn cycle_count(&mut self) {
@@ -61,13 +62,12 @@ pub fn solution_day_10_01(file_path: String) -> Option<isize> {
     Some(circuit.strength)
 }
 
-pub fn solution_day_10_02(file_path: String) -> Option<usize> {
+pub fn solution_day_10_02(file_path: String) -> Option<String> {
     let mut circuit = ClockCircuit::new();
     read_lines(file_path)
         .iter()
         .for_each(|ins| circuit.execute(ins));
-    circuit.print_image();
-    None
+    Some(circuit.get_image())
 }
 
 #[cfg(test)]
@@ -84,8 +84,10 @@ mod tests {
     #[test]
     fn test_day_10_02() {
         let file_path: String = String::from("src/inputs/day10e.txt");
-        let result = solution_day_10_02(file_path);
-        assert_eq!(result, None);
+        let result = solution_day_10_02(file_path).unwrap();
+        println!("{}", result);
+        let x = !result.is_empty();
+        assert!(x, "Result is None!");
     }
 
     #[test]
@@ -100,7 +102,9 @@ mod tests {
     #[ignore]
     fn output_day_10_02() {
         let file_path: String = String::from("src/inputs/day10.txt");
-        let result = solution_day_10_02(file_path);
-        assert_eq!(result, None);
+        let result = solution_day_10_02(file_path).unwrap();
+        println!("{}", result);
+        let x = !result.is_empty();
+        assert!(x, "Result is None!");
     }
 }

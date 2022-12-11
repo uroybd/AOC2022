@@ -1,5 +1,3 @@
-use std::option::Iter;
-
 pub struct Faux2DArray<T> {
     items: Vec<T>,
     width: usize,
@@ -30,6 +28,30 @@ impl<T> Faux2DArray<T> {
         Self { items, width }
     }
 
+    pub fn column_length(&self) -> usize {
+        self.items.len() / self.width
+    }
+
+    pub fn add_row(&mut self, data: Vec<T>) -> std::result::Result<(), &'static str> {
+        if data.len() != self.width {
+            return Err("Invalid row length");
+        }
+        self.items.extend(data);
+        Ok(())
+    }
+
+    pub fn add_col(&mut self, data: Vec<T>) -> std::result::Result<(), &'static str> {
+        let data_length = data.len();
+        if data_length != self.column_length() {
+            return Err("Invalid row length");
+        }
+        for (i, d) in data.into_iter().enumerate() {
+            let position = (self.width * (i + 1)) + (i - 1);
+            self.items.splice(position..position, [d]);
+        }
+        Ok(())
+    }
+
     pub fn at(&self, x: usize, y: usize) -> &T {
         &self.items[self.absolute_index(x, y)]
     }
@@ -39,32 +61,84 @@ impl<T> Faux2DArray<T> {
         self.items[idx] = val;
     }
 
-    pub fn row(&self, row: usize) -> impl Iterator<Item = &T> + '_ {
+    pub fn row(&self, row: usize) -> Option<impl Iterator<Item = &T> + '_> {
+        if row >= self.width {
+            return None;
+        }
         let start = self.width * row;
+        let end = start + self.width;
+        Some(self.items[start..end].iter())
+    }
+
+    pub fn col(&self, col: usize) -> Option<impl Iterator<Item = &T> + '_> {
+        Some(self.items.iter().skip(col).step_by(self.width))
+    }
+
+    pub fn rows(&self) -> impl Iterator<Item = Vec<&T>> + '_ {
+        self.items
+            .chunks(self.width)
+            .map(|c| c.iter().collect::<Vec<&T>>())
+    }
+
+    pub fn cols(&self) -> impl Iterator<Item = Vec<&T>> + '_ {
+        // self.items.
+        (0..self.width).map(|idx| self.col(idx).unwrap().collect::<Vec<&T>>())
+    }
+
+    pub fn to_row_start(&self, x: usize, y: usize) -> Option<impl Iterator<Item = &T> + '_> {
+        if x >= self.width {
+            return None;
+        }
+        let row_start = self.width * y;
+        let start = row_start + x;
         let end = start + self.width + 1;
-        self.items[start..end].iter()
+        Some(self.items[start..end].iter())
     }
 
-    pub fn col(&self, col: usize) -> impl Iterator<Item = &T> + '_ {
-        self.items.iter().skip(col - 1).step_by(self.width)
+    pub fn to_row_end(&self, x: usize, y: usize) -> Option<impl Iterator<Item = &T> + '_> {
+        if x >= self.width {
+            return None;
+        }
+        let start = self.width * y;
+        let end = start + x;
+        Some(self.items[start..end].iter().rev())
     }
 
-    pub fn rows(&self) -> impl Iterator<Item = &[T]> + '_ {
-        self.items.chunks(self.width)
+    pub fn to_col_end(&self, x: usize, y: usize) -> Option<impl Iterator<Item = &T> + '_> {
+        if x >= self.width {
+            return None;
+        }
+        Some(
+            self.items
+                .iter()
+                .skip(x)
+                .skip(y * self.width)
+                .step_by(self.width),
+        )
     }
 
-    // pub fn cols(&self) -> impl Iterator<Item = &[T]> + '_ {
-    //     // self.items.
-    //     (0..self.width).map(|idx| {
-    //         let items = self.col(idx).cloned().collect::<Vec<&T>>();
-    //         items.clone().as_slice()
-    //     })
-    // }
+    pub fn to_col_start(&self, x: usize, y: usize) -> Option<impl Iterator<Item = &T> + '_> {
+        if x >= self.width {
+            return None;
+        }
+        Some(
+            self.items[x..y * self.width]
+                .iter()
+                .rev()
+                .skip(y * self.width)
+                .step_by(self.width),
+        )
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn create_usize_array() -> Faux2DArray<usize> {
+        let new_2d_array: Faux2DArray<usize> = Faux2DArray::filled(5, 5, |x, _| x);
+        new_2d_array
+    }
 
     #[test]
     fn test_new() {
@@ -80,5 +154,56 @@ mod tests {
         assert_eq!(new_2d_array.items.len(), 25);
         assert_eq!(new_2d_array.at(0, 0), &"0x0".to_string());
         assert_eq!(new_2d_array.at(4, 4), &"4x4".to_string());
+    }
+
+    #[test]
+    fn test_at() {
+        let a = create_usize_array();
+        assert_eq!(a.at(0, 0), &0);
+        assert_eq!(a.at(3, 0), &3);
+        assert_eq!(a.at(3, 4), &3);
+    }
+
+    #[test]
+    fn test_row() {
+        let a = create_usize_array();
+        let target = vec![&0, &1, &2, &3, &4];
+        assert_eq!(a.row(0).unwrap().collect::<Vec<&usize>>(), target);
+    }
+
+    #[test]
+    fn test_rows() {
+        let a = create_usize_array();
+        let target: Vec<&usize> = vec![&0, &1, &2, &3, &4];
+        let mut rows = a.rows();
+        assert_eq!(rows.next().unwrap(), target);
+        assert_eq!(rows.next().unwrap(), target);
+        assert_eq!(rows.next().unwrap(), target);
+        assert_eq!(rows.next().unwrap(), target);
+    }
+
+    #[test]
+    fn test_col() {
+        let a = create_usize_array();
+        let target = vec![&0, &0, &0, &0, &0];
+        let target2 = vec![&3, &3, &3, &3, &3];
+        assert_eq!(a.col(0).unwrap().collect::<Vec<&usize>>(), target);
+        assert_eq!(a.col(3).unwrap().collect::<Vec<&usize>>(), target2);
+    }
+
+    #[test]
+    fn test_cols() {
+        let a = create_usize_array();
+        let target = vec![&0, &0, &0, &0, &0];
+        let target1 = vec![&1, &1, &1, &1, &1];
+        let target2 = vec![&2, &2, &2, &2, &2];
+        let target3 = vec![&3, &3, &3, &3, &3];
+        let target4 = vec![&4, &4, &4, &4, &4];
+        let mut cols = a.cols();
+        assert_eq!(cols.next().unwrap(), target);
+        assert_eq!(cols.next().unwrap(), target1);
+        assert_eq!(cols.next().unwrap(), target2);
+        assert_eq!(cols.next().unwrap(), target3);
+        assert_eq!(cols.next().unwrap(), target4);
     }
 }
