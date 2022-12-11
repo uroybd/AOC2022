@@ -109,17 +109,17 @@ impl<T> Faux2DArray<T> {
         (0..self.width).map(|idx| self.col(idx).unwrap().collect::<Vec<&T>>())
     }
 
-    pub fn to_row_start(&self, x: usize, y: usize) -> Option<impl Iterator<Item = &T> + '_> {
+    pub fn to_row_end(&self, x: usize, y: usize) -> Option<impl Iterator<Item = &T> + '_> {
         if x >= self.width {
             return None;
         }
         let row_start = self.width * y;
-        let start = row_start + x;
-        let end = start + self.width + 1;
+        let start = row_start + x + 1;
+        let end = row_start + self.width;
         Some(self.items[start..end].iter())
     }
 
-    pub fn to_row_end(&self, x: usize, y: usize) -> Option<impl Iterator<Item = &T> + '_> {
+    pub fn to_row_start(&self, x: usize, y: usize) -> Option<impl Iterator<Item = &T> + '_> {
         if x >= self.width {
             return None;
         }
@@ -135,7 +135,7 @@ impl<T> Faux2DArray<T> {
         Some(
             self.items
                 .iter()
-                .skip(x)
+                .skip(x + self.width)
                 .skip(y * self.width)
                 .step_by(self.width),
         )
@@ -145,12 +145,12 @@ impl<T> Faux2DArray<T> {
         if x >= self.width {
             return None;
         }
+
         Some(
-            self.items[x..y * self.width]
+            self.items[x..self.items.len() - (self.width * (y + 1))]
                 .iter()
-                .rev()
-                .skip(y * self.width)
-                .step_by(self.width),
+                .step_by(self.width)
+                .rev(),
         )
     }
 }
@@ -161,6 +161,10 @@ mod tests {
 
     fn create_usize_array() -> Faux2DArray<usize> {
         let new_2d_array: Faux2DArray<usize> = Faux2DArray::filled(5, 5, |x, _| x);
+        new_2d_array
+    }
+    fn create_usize_array_2() -> Faux2DArray<usize> {
+        let new_2d_array: Faux2DArray<usize> = Faux2DArray::filled(5, 5, |x, y| (y * 5) + x);
         new_2d_array
     }
 
@@ -265,5 +269,37 @@ mod tests {
         let result = a.remove_col(0);
         assert!(result.is_ok(), "Col remove failed!");
         assert_eq!(a.items.len(), 20);
+    }
+
+    #[test]
+    fn test_to_row_start() {
+        let a = create_usize_array_2();
+        let result: Vec<&usize> = a.to_row_start(2, 0).unwrap().collect();
+        let target = [&1, &0];
+        assert_eq!(result.as_slice(), target);
+    }
+
+    #[test]
+    fn test_to_row_end() {
+        let a = create_usize_array_2();
+        let result: Vec<&usize> = a.to_row_end(2, 0).unwrap().collect();
+        let target = [&3, &4];
+        assert_eq!(result.as_slice(), target);
+    }
+
+    #[test]
+    fn test_to_col_start() {
+        let a = create_usize_array_2();
+        let result: Vec<&usize> = a.to_col_start(0, 2).unwrap().collect();
+        let target = [&5, &0];
+        assert_eq!(result.as_slice(), target);
+    }
+
+    #[test]
+    fn test_to_col_end() {
+        let a = create_usize_array_2();
+        let result: Vec<&usize> = a.to_col_end(0, 2).unwrap().collect();
+        let target = [&15, &20];
+        assert_eq!(result.as_slice(), target);
     }
 }
