@@ -28,7 +28,7 @@ impl<T> Faux2DArray<T> {
         Self { items, width }
     }
 
-    pub fn column_length(&self) -> usize {
+    pub fn row_length(&self) -> usize {
         self.items.len() / self.width
     }
 
@@ -40,15 +40,39 @@ impl<T> Faux2DArray<T> {
         Ok(())
     }
 
-    pub fn add_col(&mut self, data: Vec<T>) -> std::result::Result<(), &'static str> {
-        let data_length = data.len();
-        if data_length != self.column_length() {
+    pub fn remove_row(&mut self, row: usize) -> std::result::Result<(), &'static str> {
+        if row >= self.width {
             return Err("Invalid row length");
         }
+        let start = row * self.width;
+        let end = start + self.width;
+        self.items.drain(start..end);
+        Ok(())
+    }
+
+    pub fn add_col(&mut self, data: Vec<T>) -> std::result::Result<(), &'static str> {
+        let data_length = data.len();
+        if data_length != self.row_length() {
+            return Err("Invalid column length");
+        }
         for (i, d) in data.into_iter().enumerate() {
-            let position = (self.width * (i + 1)) + (i - 1);
+            let position = (self.width * (i + 1)) + i;
             self.items.splice(position..position, [d]);
         }
+        self.width += 1;
+        Ok(())
+    }
+
+    pub fn remove_col(&mut self, col: usize) -> std::result::Result<(), &'static str> {
+        if col >= self.row_length() {
+            return Err("Invalid column length");
+        }
+        for i in (0..self.row_length()).rev() {
+            let position = col + (self.width * i);
+            println!("{:?}", position);
+            self.items.remove(position);
+        }
+        self.width -= 1;
         Ok(())
     }
 
@@ -62,15 +86,15 @@ impl<T> Faux2DArray<T> {
     }
 
     pub fn row(&self, row: usize) -> Option<impl Iterator<Item = &T> + '_> {
-        if row >= self.width {
-            return None;
-        }
         let start = self.width * row;
         let end = start + self.width;
         Some(self.items[start..end].iter())
     }
 
     pub fn col(&self, col: usize) -> Option<impl Iterator<Item = &T> + '_> {
+        if col >= self.width {
+            return None;
+        }
         Some(self.items.iter().skip(col).step_by(self.width))
     }
 
@@ -205,5 +229,41 @@ mod tests {
         assert_eq!(cols.next().unwrap(), target2);
         assert_eq!(cols.next().unwrap(), target3);
         assert_eq!(cols.next().unwrap(), target4);
+    }
+
+    #[test]
+    fn test_add_row() {
+        let mut a = create_usize_array();
+        let result = a.add_row(vec![8, 8, 8, 8, 8]);
+        assert!(result.is_ok(), "Row append failed!");
+        let target = vec![&8, &8, &8, &8, &8];
+        let row = a.row(5).unwrap().collect::<Vec<&usize>>();
+        assert_eq!(row, target);
+    }
+
+    #[test]
+    fn test_add_column() {
+        let mut a = create_usize_array();
+        let result = a.add_col(vec![8, 8, 8, 8, 8]);
+        assert!(result.is_ok(), "Col append failed!");
+        let target = vec![&8, &8, &8, &8, &8];
+        let row = a.col(5).unwrap().collect::<Vec<&usize>>();
+        assert_eq!(row, target);
+    }
+
+    #[test]
+    fn test_remove_row() {
+        let mut a = create_usize_array();
+        let result = a.remove_row(0);
+        assert!(result.is_ok(), "Row remove failed!");
+        assert_eq!(a.items.len(), 20);
+    }
+
+    #[test]
+    fn test_remove_column() {
+        let mut a = create_usize_array();
+        let result = a.remove_col(0);
+        assert!(result.is_ok(), "Col remove failed!");
+        assert_eq!(a.items.len(), 20);
     }
 }

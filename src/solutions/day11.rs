@@ -15,9 +15,9 @@ struct Monkey {
 #[derive(Debug, Clone)]
 enum WorryOperation {
     Add(usize),
-    AddSelf,
+    Twice,
     Multiply(usize),
-    MultiplySelf,
+    Square,
 }
 
 impl WorryOperation {
@@ -25,8 +25,22 @@ impl WorryOperation {
         match self {
             WorryOperation::Add(x) => old + x,
             WorryOperation::Multiply(x) => old * x,
-            WorryOperation::AddSelf => old + old,
-            WorryOperation::MultiplySelf => old * old,
+            WorryOperation::Twice => old * 2,
+            WorryOperation::Square => old.pow(2),
+        }
+    }
+}
+
+enum StressManagerEnum {
+    Modulo(usize),
+    Divide(usize),
+}
+
+impl StressManagerEnum {
+    fn operate(&self, val: usize) -> usize {
+        match self {
+            StressManagerEnum::Modulo(x) => val % x,
+            StressManagerEnum::Divide(x) => val / x,
         }
     }
 }
@@ -53,9 +67,9 @@ impl Monkey {
             .take(2)
             .collect();
         let operation = match op_split.as_slice() {
-            ["old", "*"] => WorryOperation::MultiplySelf,
+            ["old", "*"] => WorryOperation::Square,
             [x, "*"] => WorryOperation::Multiply(x.parse::<usize>().unwrap()),
-            ["old", "+"] => WorryOperation::AddSelf,
+            ["old", "+"] => WorryOperation::Twice,
             [x, "+"] => WorryOperation::Add(x.parse::<usize>().unwrap()),
             _ => unreachable!(),
         };
@@ -79,11 +93,12 @@ impl Monkey {
         }
     }
 
-    fn operate(&self, div_func: impl Fn(usize) -> usize) -> Vec<(usize, usize)> {
+    fn operate(&mut self, stress_manager: &StressManagerEnum) -> Vec<(usize, usize)> {
         self.inventory
-            .iter()
+            .drain(..)
             .map(|item| {
-                let new_worry_level = div_func(self.operation.operate(*item));
+                let new_worry_level = stress_manager.operate(self.operation.operate(item));
+                self.inspected += 1;
                 if new_worry_level % self.devisable_by == 0 {
                     (self.throw_to_if_true, new_worry_level)
                 } else {
@@ -94,20 +109,29 @@ impl Monkey {
     }
 }
 
-pub fn solution_day_11_01(file_path: String) -> Option<usize> {
+fn run_monkey_game(
+    file_path: String,
+    round: usize,
+    stress_divider: Option<usize>,
+) -> Option<usize> {
     let mut monkeys: Vec<Monkey> = fs::read_to_string(file_path)
         .unwrap()
         .split("\n\nMonkey")
         .map(Monkey::from_string)
         .collect();
     let len = monkeys.len();
-    for _ in 0..20 {
+    let stress_manager = match stress_divider {
+        Some(d) => StressManagerEnum::Divide(d),
+        None => {
+            let modulo: usize = monkeys.iter().map(|m| m.devisable_by).product();
+            StressManagerEnum::Modulo(modulo)
+        }
+    };
+    for _ in 0..round {
         for i in 0..len {
-            for (next, val) in monkeys[i].clone().operate(|x| x / 3).iter() {
+            for (next, val) in monkeys[i].operate(&stress_manager).iter() {
                 monkeys[*next].inventory.push(*val);
             }
-            monkeys[i].inspected += monkeys[i].inventory.len();
-            monkeys[i].inventory.clear();
         }
     }
     let mut scores: Vec<usize> = monkeys.iter().map(|m| m.inspected).collect();
@@ -115,27 +139,12 @@ pub fn solution_day_11_01(file_path: String) -> Option<usize> {
     Some(scores[len - 2] * scores[len - 1])
 }
 
-pub fn solution_day_11_02(file_path: String) -> Option<usize> {
-    let mut monkeys: Vec<Monkey> = fs::read_to_string(file_path)
-        .unwrap()
-        .split("\n\nMonkey")
-        .map(Monkey::from_string)
-        .collect();
-    let modulo: usize = monkeys.iter().map(|m| m.devisable_by).product();
+pub fn solution_day_11_01(file_path: String) -> Option<usize> {
+    run_monkey_game(file_path, 20, Some(3))
+}
 
-    let len = monkeys.len();
-    for _ in 0..10000 {
-        for i in 0..len {
-            for (next, val) in monkeys[i].clone().operate(|x| x % modulo).iter() {
-                monkeys[*next].inventory.push(*val);
-            }
-            monkeys[i].inspected += monkeys[i].inventory.len();
-            monkeys[i].inventory.clear();
-        }
-    }
-    let mut scores: Vec<usize> = monkeys.iter().map(|m| m.inspected).collect();
-    scores.sort();
-    Some(scores[len - 2] * scores[len - 1])
+pub fn solution_day_11_02(file_path: String) -> Option<usize> {
+    run_monkey_game(file_path, 10_000, None)
 }
 
 #[cfg(test)]
