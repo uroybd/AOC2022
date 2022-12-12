@@ -1,6 +1,8 @@
 // Advent of Code 2022 - Day 08
 
-use crate::utils::{collections::Faux2DArray, read::read_lines};
+use std::fs;
+
+use crate::utils::collections::Faux2DArray;
 
 fn get_visible(trees: &Faux2DArray<usize>) -> usize {
     let (width, height) = (trees.width, trees.height());
@@ -84,20 +86,19 @@ fn largest_scenic_score(trees: &Faux2DArray<usize>) -> usize {
 }
 
 fn parse_input(file_path: String) -> Faux2DArray<usize> {
-    let input = read_lines(file_path);
-    let width = input[0].len();
-    let height = input.len();
-    let trees: Faux2DArray<usize> = Faux2DArray::filled_from_iter(
-        width,
-        height,
-        &mut input.into_iter().flat_map(|l| {
+    let mut trees = Faux2DArray::new(5);
+    fs::read_to_string(file_path)
+        .unwrap()
+        .trim()
+        .lines()
+        .for_each(|l| {
             let row: Vec<usize> = l
                 .chars()
                 .map(|s| s.to_string().parse::<usize>().unwrap())
                 .collect();
-            row
-        }),
-    );
+            trees.width = row.len();
+            trees.add_row(row).unwrap();
+        });
     trees
 }
 
