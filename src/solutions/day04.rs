@@ -1,6 +1,6 @@
 // Advent of Code 2022 - Day 04
 
-use crate::utils::read::read_lines;
+use std::fs;
 
 fn parse_ranges(inp: &str) -> [[usize; 2]; 2] {
     let mut iter = inp.split(',').map(|r| {
@@ -31,18 +31,20 @@ fn are_overlapping(pair: [[usize; 2]; 2]) -> bool {
 }
 
 pub fn solution_day_04_01(file_path: String) -> Option<usize> {
-    let input = read_lines(file_path);
-    let result = input
-        .iter()
+    let result = fs::read_to_string(file_path)
+        .expect("Couldn't read file")
+        .trim()
+        .lines()
         .map(|l| are_contained(parse_ranges(l)) as usize)
         .sum();
     Some(result)
 }
 
 pub fn solution_day_04_02(file_path: String) -> Option<usize> {
-    let input = read_lines(file_path);
-    let result = input
-        .iter()
+    let result = fs::read_to_string(file_path)
+        .expect("Couldn't read file")
+        .trim()
+        .lines()
         .map(|l| are_overlapping(parse_ranges(l)) as usize)
         .sum();
     Some(result)

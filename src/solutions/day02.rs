@@ -1,6 +1,6 @@
 // Advent of Code 2022 - Day 02
 
-use crate::utils::read::read_lines;
+use std::fs;
 
 fn score_from_string(s: &str) -> usize {
     match s {
@@ -12,24 +12,13 @@ fn score_from_string(s: &str) -> usize {
 }
 
 fn get_score(opponent: usize, me: usize) -> usize {
-    if me == opponent {
-        return 3 + me;
-    }
-    if me == (opponent % 3) + 1 {
-        6 + me
+    me + if me == opponent {
+        3
+    } else if me == (opponent % 3) + 1 {
+        6
     } else {
-        me
+        0
     }
-}
-
-fn get_game_score(rounds: &[String]) -> usize {
-    rounds
-        .iter()
-        .map(|r| {
-            let entries: Vec<&str> = r.split(' ').collect();
-            get_score(score_from_string(entries[0]), score_from_string(entries[1]))
-        })
-        .sum()
 }
 
 fn get_score_following_strategy(opponent: usize, strategy: &str) -> usize {
@@ -41,24 +30,34 @@ fn get_score_following_strategy(opponent: usize, strategy: &str) -> usize {
     }
 }
 
-fn get_game_score_following_strategy(rounds: &[String]) -> usize {
-    rounds
-        .iter()
-        .map(|r| {
-            let entries: Vec<&str> = r.split(' ').collect();
-            get_score_following_strategy(score_from_string(entries[0]), entries[1])
-        })
-        .sum()
-}
-
 pub fn solution_day_02_01(file_path: String) -> Option<usize> {
-    let input = read_lines(file_path);
-    Some(get_game_score(&input))
+    let result = fs::read_to_string(file_path)
+        .expect("File not found")
+        .lines()
+        .map(|r| {
+            let mut entries = r.split(' ');
+            get_score(
+                score_from_string(entries.next().unwrap()),
+                score_from_string(entries.next().unwrap()),
+            )
+        })
+        .sum();
+    Some(result)
 }
 
 pub fn solution_day_02_02(file_path: String) -> Option<usize> {
-    let input = read_lines(file_path);
-    Some(get_game_score_following_strategy(&input))
+    let result = fs::read_to_string(file_path)
+        .expect("File not found")
+        .lines()
+        .map(|r| {
+            let mut entries = r.split(' ');
+            get_score_following_strategy(
+                score_from_string(entries.next().unwrap()),
+                entries.next().unwrap(),
+            )
+        })
+        .sum();
+    Some(result)
 }
 
 #[cfg(test)]

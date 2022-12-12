@@ -1,7 +1,6 @@
 // Advent of Code 2022 - Day 09
 
-use crate::utils::read::read_lines;
-use std::collections::HashSet;
+use std::{collections::HashSet, fs};
 
 #[derive(Debug, PartialEq, Eq, Clone, Hash)]
 struct Coordinate {
@@ -72,18 +71,16 @@ impl Rope {
 }
 
 pub fn solution_day_09_01(file_path: String) -> Option<usize> {
-    let instructions = read_lines(file_path);
     let mut rope = Rope::at_start(1);
-    for instruction in instructions.iter() {
+    for instruction in fs::read_to_string(file_path).unwrap().trim().lines() {
         rope.run_instruction(instruction);
     }
     Some(rope.movement_record.len())
 }
 
 pub fn solution_day_09_02(file_path: String) -> Option<usize> {
-    let instructions = read_lines(file_path);
     let mut rope = Rope::at_start(9);
-    for instruction in instructions.iter() {
+    for instruction in fs::read_to_string(file_path).unwrap().trim().lines() {
         rope.run_instruction(instruction);
     }
     Some(rope.movement_record.len())

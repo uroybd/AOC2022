@@ -1,9 +1,8 @@
 // Advent of Code 2022 - Day 03
 
-use crate::utils::read::read_lines;
-use std::collections::HashSet;
+use std::{collections::HashSet, fs};
 
-fn get_common(rucksack: &String) -> char {
+fn get_common(rucksack: &str) -> char {
     let length = rucksack.len() / 2;
     let comp_1 = &rucksack[..length];
     let comp_2: HashSet<char> = rucksack[length..].chars().collect();
@@ -32,10 +31,6 @@ fn get_badge(mut rucksacks: Vec<String>) -> char {
         .expect("No common items")
 }
 
-fn get_total_priorities(input: Vec<String>) -> usize {
-    input.iter().map(|r| get_priority(get_common(r))).sum()
-}
-
 fn get_total_badge_priorities(input: Vec<String>) -> usize {
     input
         .chunks(3)
@@ -44,12 +39,22 @@ fn get_total_badge_priorities(input: Vec<String>) -> usize {
 }
 
 pub fn solution_day_03_01(file_path: String) -> Option<usize> {
-    let input = read_lines(file_path);
-    Some(get_total_priorities(input))
+    Some(
+        fs::read_to_string(file_path)
+            .expect("File couldn't be read.")
+            .lines()
+            .map(|r| get_priority(get_common(r)))
+            .sum(),
+    )
 }
 
 pub fn solution_day_03_02(file_path: String) -> Option<usize> {
-    let input = read_lines(file_path);
+    let input: Vec<String> = fs::read_to_string(file_path)
+        .expect("File couldn't be read.")
+        .trim()
+        .lines()
+        .map(|l| l.to_string())
+        .collect();
     Some(get_total_badge_priorities(input))
 }
 

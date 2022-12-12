@@ -1,6 +1,6 @@
 // Advent of Code 2022 - Day 10
 
-use crate::utils::read::read_lines;
+use std::fs;
 
 pub struct ClockCircuit {
     cycle: usize,
@@ -56,16 +56,20 @@ impl ClockCircuit {
 
 pub fn solution_day_10_01(file_path: String) -> Option<isize> {
     let mut circuit = ClockCircuit::new();
-    read_lines(file_path)
-        .iter()
+    fs::read_to_string(file_path)
+        .unwrap()
+        .trim()
+        .lines()
         .for_each(|ins| circuit.execute(ins));
     Some(circuit.strength)
 }
 
 pub fn solution_day_10_02(file_path: String) -> Option<String> {
     let mut circuit = ClockCircuit::new();
-    read_lines(file_path)
-        .iter()
+    fs::read_to_string(file_path)
+        .unwrap()
+        .trim()
+        .lines()
         .for_each(|ins| circuit.execute(ins));
     Some(circuit.get_image())
 }
