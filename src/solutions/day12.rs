@@ -69,9 +69,8 @@ fn parse_input(file_path: String) -> (Faux2DArray<u8>, usize, usize) {
     (steps, r_start, r_goal)
 }
 
-fn calculate_distances(steps: &Faux2DArray<u8>, start: usize, end: usize) -> Option<usize> {
+fn create_path_map(steps: &Faux2DArray<u8>) -> HashMap<usize, Vec<Connection>> {
     let mut connections = HashMap::new();
-    let mut distances = HashMap::new();
     for (idx, current) in steps.items.iter().enumerate() {
         let (x, y) = steps.cartesian_index(idx);
         let mut l_dist = Vec::new();
@@ -95,9 +94,18 @@ fn calculate_distances(steps: &Faux2DArray<u8>, start: usize, end: usize) -> Opt
         if !l_dist.is_empty() {
             connections.insert(idx, l_dist);
         }
-        distances.insert(idx, usize::MAX);
     }
+    connections
+}
 
+fn shortest_distance(
+    connections: &HashMap<usize, Vec<Connection>>,
+    size: usize,
+    start: usize,
+    end: usize,
+) -> Option<usize> {
+    let mut distances: HashMap<usize, usize> =
+        vec![usize::MAX; size].into_iter().enumerate().collect();
     let mut queue = BinaryHeap::new();
     let mut visited = HashSet::new();
 
@@ -129,28 +137,23 @@ fn calculate_distances(steps: &Faux2DArray<u8>, start: usize, end: usize) -> Opt
 
 pub fn solution_day_12_01(file_path: String) -> Option<usize> {
     let (steps, start, end) = parse_input(file_path);
-    calculate_distances(&steps, start, end)
+    let positions = create_path_map(&steps);
+    shortest_distance(&positions, steps.items.len(), start, end)
 }
 
 pub fn solution_day_12_02(file_path: String) -> Option<usize> {
     let (steps, _, end) = parse_input(file_path);
-    let lowest: Vec<usize> = steps
+    let positions = create_path_map(&steps);
+    let length = steps.items.len();
+
+    steps
         .items
         .iter()
         .enumerate()
         .filter(|(_, s)| s == &&0)
-        .map(|(idx, _)| idx)
-        .collect();
-    let mut shortest = usize::MAX;
-    for s in lowest {
-        if let Some(res) = calculate_distances(&steps, s, end) {
-            if res < shortest {
-                shortest = res;
-            }
-        }
-    }
-
-    Some(shortest)
+        .map(|(idx, _)| shortest_distance(&positions, length, idx, end))
+        .min()
+        .unwrap()
 }
 
 #[cfg(test)]
