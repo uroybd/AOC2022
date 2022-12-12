@@ -2,13 +2,31 @@
 
 use crate::utils::collections::Faux2DArray;
 use std::cmp::*;
-use std::collections::{BinaryHeap, HashMap};
-use std::{collections::HashSet, fs};
+use std::collections::{BinaryHeap, HashMap, HashSet};
+use std::fs;
 
 #[derive(Eq, Debug)]
 struct Connection {
-    vertex: usize,
+    position: usize,
     distance: usize,
+}
+
+impl Ord for Connection {
+    fn cmp(&self, other: &Self) -> Ordering {
+        other.distance.cmp(&self.distance)
+    }
+}
+
+impl PartialOrd for Connection {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl PartialEq for Connection {
+    fn eq(&self, other: &Self) -> bool {
+        self.distance == other.distance && self.position == other.position
+    }
 }
 
 fn char_to_num(c: char) -> u8 {
@@ -51,24 +69,6 @@ fn parse_input(file_path: String) -> (Faux2DArray<u8>, usize, usize) {
     (steps, r_start, r_goal)
 }
 
-impl Ord for Connection {
-    fn cmp(&self, other: &Self) -> Ordering {
-        other.distance.cmp(&self.distance)
-    }
-}
-
-impl PartialOrd for Connection {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl PartialEq for Connection {
-    fn eq(&self, other: &Self) -> bool {
-        self.distance == other.distance && self.vertex == other.vertex
-    }
-}
-
 fn calculate_distances(steps: &Faux2DArray<u8>, start: usize, end: usize) -> Option<usize> {
     let mut connections = HashMap::new();
     let mut distances = HashMap::new();
@@ -78,7 +78,7 @@ fn calculate_distances(steps: &Faux2DArray<u8>, start: usize, end: usize) -> Opt
         if let Some(v) = steps.prev_x(x, y) {
             if current + 1 >= *v {
                 l_dist.push(Connection {
-                    vertex: steps.absolute_index(x - 1, y),
+                    position: steps.absolute_index(x - 1, y),
                     distance: 1,
                 });
             }
@@ -86,7 +86,7 @@ fn calculate_distances(steps: &Faux2DArray<u8>, start: usize, end: usize) -> Opt
         if let Some(v) = steps.prev_y(x, y) {
             if current + 1 >= *v {
                 l_dist.push(Connection {
-                    vertex: steps.absolute_index(x, y - 1),
+                    position: steps.absolute_index(x, y - 1),
                     distance: 1,
                 });
             }
@@ -94,7 +94,7 @@ fn calculate_distances(steps: &Faux2DArray<u8>, start: usize, end: usize) -> Opt
         if let Some(v) = steps.next_x(x, y) {
             if current + 1 >= *v {
                 l_dist.push(Connection {
-                    vertex: steps.absolute_index(x + 1, y),
+                    position: steps.absolute_index(x + 1, y),
                     distance: 1,
                 });
             }
@@ -102,7 +102,7 @@ fn calculate_distances(steps: &Faux2DArray<u8>, start: usize, end: usize) -> Opt
         if let Some(v) = steps.next_y(x, y) {
             if current + 1 >= *v {
                 l_dist.push(Connection {
-                    vertex: steps.absolute_index(x, y + 1),
+                    position: steps.absolute_index(x, y + 1),
                     distance: 1,
                 });
             }
@@ -117,22 +117,22 @@ fn calculate_distances(steps: &Faux2DArray<u8>, start: usize, end: usize) -> Opt
     let mut visited = HashSet::new();
 
     queue.push(Connection {
-        vertex: start,
+        position: start,
         distance: 0,
     });
 
     let mut current = start;
     while current != end && !queue.is_empty() {
         let c = queue.pop().unwrap();
-        current = c.vertex;
+        current = c.position;
         let distance = c.distance;
         if !visited.contains(&current) {
             visited.insert(current);
             distances.insert(current, distance);
             for v in connections.get(&current).unwrap() {
-                if !visited.contains(&v.vertex) {
+                if !visited.contains(&v.position) {
                     queue.push(Connection {
-                        vertex: v.vertex,
+                        position: v.position,
                         distance: v.distance + distance,
                     });
                 }
