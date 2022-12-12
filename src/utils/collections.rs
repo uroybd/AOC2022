@@ -43,6 +43,12 @@ impl<T> Faux2DArray<T> {
         (y * self.width) + x
     }
 
+    pub fn cartesian_index(&self, pos: usize) -> (usize, usize) {
+        let y = pos / self.width;
+        let x = pos % self.width;
+        (x, y)
+    }
+
     pub fn filled<F>(width: usize, height: usize, filler: F) -> Faux2DArray<T>
     where
         F: Fn(usize, usize) -> T,

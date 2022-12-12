@@ -5,12 +5,6 @@ use std::cmp::*;
 use std::collections::{BinaryHeap, HashMap};
 use std::{collections::HashSet, fs};
 
-#[derive(Debug)]
-struct Step {
-    id: usize,
-    height: u8,
-}
-
 #[derive(Eq, Debug)]
 struct Connection {
     vertex: usize,
@@ -25,38 +19,36 @@ fn char_to_num(c: char) -> u8 {
     }
 }
 
-fn parse_input(file_path: String) -> (Faux2DArray<Step>, usize, usize) {
+fn parse_input(file_path: String) -> (Faux2DArray<u8>, usize, usize) {
     let mut steps = Faux2DArray::new(5);
-    let mut goal = 0;
-    let mut start = 0;
+    let mut goal = (0, 0);
+    let mut start = (0, 0);
     fs::read_to_string(file_path)
         .unwrap()
         .trim()
         .lines()
         .enumerate()
         .for_each(|(y, l)| {
-            let width = l.len();
-            let row: Vec<Step> = l
+            let row: Vec<u8> = l
                 .chars()
                 .enumerate()
                 .map(|(x, c)| {
-                    let id = (width * y) + x;
                     if c == 'E' {
-                        goal = id;
+                        goal = (x, y);
                     }
                     if c == 'S' {
-                        start = id;
+                        start = (x, y);
                     }
-                    Step {
-                        height: char_to_num(c),
-                        id,
-                    }
+                    char_to_num(c)
                 })
                 .collect();
             steps.width = row.len();
             steps.add_row(row).unwrap();
         });
-    (steps, start, goal)
+
+    let r_start = steps.absolute_index(start.0, start.1);
+    let r_goal = steps.absolute_index(goal.0, goal.1);
+    (steps, r_start, r_goal)
 }
 
 impl Ord for Connection {
@@ -77,51 +69,50 @@ impl PartialEq for Connection {
     }
 }
 
-fn calculate_distances(steps: &Faux2DArray<Step>, start: usize, end: usize) -> Option<usize> {
+fn calculate_distances(steps: &Faux2DArray<u8>, start: usize, end: usize) -> Option<usize> {
     let mut connections = HashMap::new();
     let mut distances = HashMap::new();
-    for y in 0..steps.height() {
-        for x in 0..steps.width {
-            let mut l_dist = Vec::new();
-            let current = steps.at(x, y);
-            if let Some(v) = steps.prev_x(x, y) {
-                if current.height + 1 >= v.height {
-                    l_dist.push(Connection {
-                        vertex: v.id,
-                        distance: 1,
-                    });
-                }
+    for (idx, current) in steps.items.iter().enumerate() {
+        let (x, y) = steps.cartesian_index(idx);
+        let mut l_dist = Vec::new();
+        if let Some(v) = steps.prev_x(x, y) {
+            if current + 1 >= *v {
+                l_dist.push(Connection {
+                    vertex: steps.absolute_index(x - 1, y),
+                    distance: 1,
+                });
             }
-            if let Some(v) = steps.prev_y(x, y) {
-                if current.height + 1 >= v.height {
-                    l_dist.push(Connection {
-                        vertex: v.id,
-                        distance: 1,
-                    });
-                }
-            }
-            if let Some(v) = steps.next_x(x, y) {
-                if current.height + 1 >= v.height {
-                    l_dist.push(Connection {
-                        vertex: v.id,
-                        distance: 1,
-                    });
-                }
-            }
-            if let Some(v) = steps.next_y(x, y) {
-                if current.height + 1 >= v.height {
-                    l_dist.push(Connection {
-                        vertex: v.id,
-                        distance: 1,
-                    });
-                }
-            }
-            if !l_dist.is_empty() {
-                connections.insert(current.id, l_dist);
-            }
-            distances.insert(current.id, usize::MAX);
         }
+        if let Some(v) = steps.prev_y(x, y) {
+            if current + 1 >= *v {
+                l_dist.push(Connection {
+                    vertex: steps.absolute_index(x, y - 1),
+                    distance: 1,
+                });
+            }
+        }
+        if let Some(v) = steps.next_x(x, y) {
+            if current + 1 >= *v {
+                l_dist.push(Connection {
+                    vertex: steps.absolute_index(x + 1, y),
+                    distance: 1,
+                });
+            }
+        }
+        if let Some(v) = steps.next_y(x, y) {
+            if current + 1 >= *v {
+                l_dist.push(Connection {
+                    vertex: steps.absolute_index(x, y + 1),
+                    distance: 1,
+                });
+            }
+        }
+        if !l_dist.is_empty() {
+            connections.insert(idx, l_dist);
+        }
+        distances.insert(idx, usize::MAX);
     }
+
     let mut queue = BinaryHeap::new();
     let mut visited = HashSet::new();
 
@@ -161,8 +152,9 @@ pub fn solution_day_12_02(file_path: String) -> Option<usize> {
     let lowest: Vec<usize> = steps
         .items
         .iter()
-        .filter(|s| s.height == 0)
-        .map(|s| s.id)
+        .enumerate()
+        .filter(|(_, s)| s == &&0)
+        .map(|(idx, _)| idx)
         .collect();
     let mut shortest = usize::MAX;
     for s in lowest {
