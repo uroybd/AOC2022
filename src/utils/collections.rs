@@ -1,11 +1,24 @@
 use std::fmt::{self, Debug};
 
 pub struct Faux2DArray<T> {
-    items: Vec<T>,
+    pub items: Vec<T>,
     pub width: usize,
 }
 
 impl<T: Debug> fmt::Display for Faux2DArray<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        // Write strictly the first element into the supplied output
+        // stream: `f`. Returns `fmt::Result` which indicates whether the
+        // operation succeeded or failed. Note that `write!` uses syntax which
+        // is very similar to `println!`.
+        self.items.chunks(self.width).for_each(|l| {
+            writeln!(f, "{:?}", l).expect("Cannot print line");
+        });
+        Ok(())
+    }
+}
+
+impl<T: Debug> Debug for Faux2DArray<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         // Write strictly the first element into the supplied output
         // stream: `f`. Returns `fmt::Result` which indicates whether the
@@ -103,6 +116,34 @@ impl<T> Faux2DArray<T> {
 
     pub fn at(&self, x: usize, y: usize) -> &T {
         &self.items[self.absolute_index(x, y)]
+    }
+
+    pub fn next_x(&self, x: usize, y: usize) -> Option<&T> {
+        if x + 1 >= self.width {
+            return None;
+        }
+        Some(&self.items[self.absolute_index(x + 1, y)])
+    }
+
+    pub fn prev_x(&self, x: usize, y: usize) -> Option<&T> {
+        if x == 0 || x > self.width {
+            return None;
+        }
+        Some(&self.items[self.absolute_index(x - 1, y)])
+    }
+
+    pub fn next_y(&self, x: usize, y: usize) -> Option<&T> {
+        if y + 1 >= self.height() {
+            return None;
+        }
+        Some(&self.items[self.absolute_index(x, y + 1)])
+    }
+
+    pub fn prev_y(&self, x: usize, y: usize) -> Option<&T> {
+        if y == 0 || y > self.height() {
+            return None;
+        }
+        Some(&self.items[self.absolute_index(x, y - 1)])
     }
 
     pub fn insert(&mut self, x: usize, y: usize, val: T) {
