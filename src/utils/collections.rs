@@ -120,8 +120,11 @@ impl<T> Faux2DArray<T> {
         Ok(())
     }
 
-    pub fn at(&self, x: usize, y: usize) -> &T {
-        &self.items[self.absolute_index(x, y)]
+    pub fn at(&self, x: usize, y: usize) -> Option<&T> {
+        if x >= self.width || y >= self.height() {
+            return None;
+        }
+        Some(&self.items[self.absolute_index(x, y)])
     }
 
     pub fn next_x(&self, x: usize, y: usize) -> Option<&T> {
@@ -251,16 +254,16 @@ mod tests {
         let new_2d_array: Faux2DArray<String> =
             Faux2DArray::filled(5, 5, |x, y| format!("{}x{}", x, y));
         assert_eq!(new_2d_array.items.len(), 25);
-        assert_eq!(new_2d_array.at(0, 0), &"0x0".to_string());
-        assert_eq!(new_2d_array.at(4, 4), &"4x4".to_string());
+        assert_eq!(new_2d_array.at(0, 0).unwrap(), &"0x0".to_string());
+        assert_eq!(new_2d_array.at(4, 4).unwrap(), &"4x4".to_string());
     }
 
     #[test]
     fn test_at() {
         let a = create_usize_array();
-        assert_eq!(a.at(0, 0), &0);
-        assert_eq!(a.at(3, 0), &3);
-        assert_eq!(a.at(3, 4), &3);
+        assert_eq!(a.at(0, 0).unwrap(), &0);
+        assert_eq!(a.at(3, 0).unwrap(), &3);
+        assert_eq!(a.at(3, 4).unwrap(), &3);
     }
 
     #[test]

@@ -9,7 +9,7 @@ fn get_visible(trees: &Faux2DArray<usize>) -> usize {
     let mut total = (height * 2) + ((width - 2) * 2);
     for y in 1..height - 1 {
         for x in 1..width - 1 {
-            let current_tree = trees.at(x, y);
+            let current_tree = trees.at(x, y).unwrap();
             if !trees.to_row_start(x, y).unwrap().any(|t| t >= current_tree)
                 || !trees.to_row_end(x, y).unwrap().any(|t| t >= current_tree)
                 || !trees.to_col_start(x, y).unwrap().any(|t| t >= current_tree)
@@ -27,7 +27,7 @@ fn largest_scenic_score(trees: &Faux2DArray<usize>) -> usize {
     let mut largest = 0;
     for y in 1..height - 1 {
         for x in 1..width - 1 {
-            let current_tree = trees.at(x, y);
+            let current_tree = trees.at(x, y).unwrap();
             let score_left = match trees
                 .to_row_start(x, y)
                 .unwrap()
