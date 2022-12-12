@@ -158,10 +158,8 @@ impl<T> Faux2DArray<T> {
             return None;
         }
         Some(
-            self.items
+            self.items[x + self.width + (y * self.width)..]
                 .iter()
-                .skip(x + self.width)
-                .skip(y * self.width)
                 .step_by(self.width),
         )
     }
@@ -173,9 +171,9 @@ impl<T> Faux2DArray<T> {
 
         Some(
             self.items
+                [..self.items.len() - ((self.width - 1 - x) + (self.width * (self.height() - y)))]
                 .iter()
                 .rev()
-                .skip((self.width - 1 - x) + (self.width * (self.height() - y)))
                 .step_by(self.width),
         )
     }
@@ -317,13 +315,11 @@ mod tests {
     fn test_to_col_start() {
         let a = create_usize_array_2();
         // println!("{}", a);
+        // let len = a.items.len();
         // println!(
         //     "{:?}",
-        //     a.items
+        //     a.items[..len - ((a.width - 1 - 1) + (a.width * (a.height() - 1)))]
         //         .iter()
-        //         .rev()
-        //         .skip((a.width - 1 - 1) + (a.width * (a.height() - 1)))
-        //         .step_by(a.width)
         //         .collect::<Vec<&usize>>()
         // );
         let result: Vec<&usize> = a.to_col_start(1, 1).unwrap().collect();
