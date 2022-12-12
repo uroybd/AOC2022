@@ -7,7 +7,7 @@ use std::fs;
 
 #[derive(Eq, Debug)]
 struct Connection {
-    position: usize,
+    pos: usize,
     distance: usize,
 }
 
@@ -25,7 +25,7 @@ impl PartialOrd for Connection {
 
 impl PartialEq for Connection {
     fn eq(&self, other: &Self) -> bool {
-        self.distance == other.distance && self.position == other.position
+        self.distance == other.distance && self.pos == other.pos
     }
 }
 
@@ -86,7 +86,7 @@ fn calculate_distances(steps: &Faux2DArray<u8>, start: usize, end: usize) -> Opt
             if let Some(v) = steps.at(x, y) {
                 if current + 1 >= *v {
                     l_dist.push(Connection {
-                        position: steps.absolute_index(x, y),
+                        pos: steps.absolute_index(x, y),
                         distance: 1,
                     });
                 }
@@ -102,22 +102,22 @@ fn calculate_distances(steps: &Faux2DArray<u8>, start: usize, end: usize) -> Opt
     let mut visited = HashSet::new();
 
     queue.push(Connection {
-        position: start,
+        pos: start,
         distance: 0,
     });
 
     let mut current = start;
     while current != end && !queue.is_empty() {
         let c = queue.pop().unwrap();
-        current = c.position;
+        current = c.pos;
         let distance = c.distance;
         if !visited.contains(&current) {
             visited.insert(current);
             distances.insert(current, distance);
             for v in connections.get(&current).unwrap() {
-                if !visited.contains(&v.position) {
+                if !visited.contains(&v.pos) {
                     queue.push(Connection {
-                        position: v.position,
+                        pos: v.pos,
                         distance: v.distance + distance,
                     });
                 }
