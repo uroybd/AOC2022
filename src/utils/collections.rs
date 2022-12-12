@@ -34,12 +34,22 @@ impl<T> Faux2DArray<T> {
     where
         F: Fn(usize, usize) -> T,
     {
-        let mut items = vec![];
+        let mut items = Vec::with_capacity(width * height);
         for y in 0..height {
             for x in 0..width {
                 items.push(filler(x, y));
             }
         }
+        Self { items, width }
+    }
+
+    pub fn filled_from_iter(
+        width: usize,
+        height: usize,
+        filler: &mut impl Iterator<Item = T>,
+    ) -> Faux2DArray<T> {
+        let mut items = Vec::with_capacity(width * height);
+        items.extend(filler);
         Self { items, width }
     }
 
