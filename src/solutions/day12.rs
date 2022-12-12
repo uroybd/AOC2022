@@ -75,36 +75,21 @@ fn calculate_distances(steps: &Faux2DArray<u8>, start: usize, end: usize) -> Opt
     for (idx, current) in steps.items.iter().enumerate() {
         let (x, y) = steps.cartesian_index(idx);
         let mut l_dist = Vec::new();
-        if let Some(v) = steps.prev_x(x, y) {
-            if current + 1 >= *v {
-                l_dist.push(Connection {
-                    position: steps.absolute_index(x - 1, y),
-                    distance: 1,
-                });
-            }
+        let mut neighbors = vec![(x + 1, y), (x, y + 1)];
+        if x > 0 {
+            neighbors.push((x - 1, y));
         }
-        if let Some(v) = steps.prev_y(x, y) {
-            if current + 1 >= *v {
-                l_dist.push(Connection {
-                    position: steps.absolute_index(x, y - 1),
-                    distance: 1,
-                });
-            }
+        if y > 0 {
+            neighbors.push((x, y - 1))
         }
-        if let Some(v) = steps.next_x(x, y) {
-            if current + 1 >= *v {
-                l_dist.push(Connection {
-                    position: steps.absolute_index(x + 1, y),
-                    distance: 1,
-                });
-            }
-        }
-        if let Some(v) = steps.next_y(x, y) {
-            if current + 1 >= *v {
-                l_dist.push(Connection {
-                    position: steps.absolute_index(x, y + 1),
-                    distance: 1,
-                });
+        for (x, y) in neighbors {
+            if let Some(v) = steps.at(x, y) {
+                if current + 1 >= *v {
+                    l_dist.push(Connection {
+                        position: steps.absolute_index(x, y),
+                        distance: 1,
+                    });
+                }
             }
         }
         if !l_dist.is_empty() {
