@@ -2,16 +2,18 @@
 
 use std::fs;
 
-fn get_visible(trees: &Vec<Vec<usize>>) -> usize {
-    let (width, height) = (trees[0].len(), trees.len());
+use crate::utils::collections::Faux2DArray;
+
+fn get_visible(trees: &Faux2DArray<usize>) -> usize {
+    let (width, height) = (trees.width, trees.height());
     let mut total = (height * 2) + ((width - 2) * 2);
     for y in 1..height - 1 {
         for x in 1..width - 1 {
-            let current_tree = trees[y][x];
-            if !trees[y][0..x].iter().any(|t| t >= &current_tree)
-                || !trees[y][(x + 1)..].iter().any(|t| t >= &current_tree)
-                || !(0..y).any(|cy| trees[cy][x] >= current_tree)
-                || !((y + 1)..height).any(|cy| trees[cy][x] >= current_tree)
+            let current_tree = trees.at(x, y);
+            if !trees.to_row_start(x, y).unwrap().any(|t| t >= current_tree)
+                || !trees.to_row_end(x, y).unwrap().any(|t| t >= current_tree)
+                || !trees.to_col_start(x, y).unwrap().any(|t| t >= current_tree)
+                || !trees.to_col_end(x, y).unwrap().any(|t| t >= current_tree)
             {
                 total += 1;
             }
@@ -20,17 +22,17 @@ fn get_visible(trees: &Vec<Vec<usize>>) -> usize {
     total
 }
 
-fn largest_scenic_score(trees: &Vec<Vec<usize>>) -> usize {
-    let (width, height) = (trees[0].len(), trees.len());
+fn largest_scenic_score(trees: &Faux2DArray<usize>) -> usize {
+    let (width, height) = (trees.width, trees.height());
     let mut largest = 0;
     for y in 0..height {
         for x in 0..width {
-            let current_tree = trees[y][x];
-            let score_left = match trees[y][0..x]
-                .iter()
-                .rev()
+            let current_tree = trees.at(x, y);
+            let score_left = match trees
+                .to_row_start(x, y)
+                .unwrap()
                 .enumerate()
-                .find(|(_, t)| t >= &&current_tree)
+                .find(|(_, t)| t >= &current_tree)
             {
                 Some((pos, _)) => pos + 1,
                 None => x,
@@ -38,10 +40,11 @@ fn largest_scenic_score(trees: &Vec<Vec<usize>>) -> usize {
             if score_left == 0 {
                 continue;
             }
-            let score_right = match trees[y][(x + 1)..]
-                .iter()
+            let score_right = match trees
+                .to_row_end(x, y)
+                .unwrap()
                 .enumerate()
-                .find(|(_, t)| t >= &&current_tree)
+                .find(|(_, t)| t >= &current_tree)
             {
                 Some((pos, _)) => pos + 1,
                 None => width - x - 1,
@@ -49,10 +52,11 @@ fn largest_scenic_score(trees: &Vec<Vec<usize>>) -> usize {
             if score_right == 0 {
                 continue;
             }
-            let score_top = match (0..y)
-                .rev()
+            let score_top = match trees
+                .to_col_start(x, y)
+                .unwrap()
                 .enumerate()
-                .find(|(_, cy)| trees[*cy][x] >= current_tree)
+                .find(|(_, t)| t >= &current_tree)
             {
                 Some((pos, _)) => pos + 1,
                 None => y,
@@ -60,9 +64,11 @@ fn largest_scenic_score(trees: &Vec<Vec<usize>>) -> usize {
             if score_top == 0 {
                 continue;
             }
-            let score_bottom = match ((y + 1)..height)
+            let score_bottom = match trees
+                .to_col_end(x, y)
+                .unwrap()
                 .enumerate()
-                .find(|(_, cy)| trees[*cy][x] >= current_tree)
+                .find(|(_, t)| t >= &current_tree)
             {
                 Some((pos, _)) => pos + 1,
                 None => height - y - 1,
@@ -79,17 +85,21 @@ fn largest_scenic_score(trees: &Vec<Vec<usize>>) -> usize {
     largest
 }
 
-fn parse_input(file_path: String) -> Vec<Vec<usize>> {
+fn parse_input(file_path: String) -> Faux2DArray<usize> {
+    let mut trees = Faux2DArray::new(5);
     fs::read_to_string(file_path)
         .unwrap()
         .trim()
         .lines()
-        .map(|l| {
-            l.chars()
+        .for_each(|l| {
+            let row: Vec<usize> = l
+                .chars()
                 .map(|s| s.to_string().parse::<usize>().unwrap())
-                .collect()
-        })
-        .collect()
+                .collect();
+            trees.width = row.len();
+            trees.add_row(row).unwrap();
+        });
+    trees
 }
 
 pub fn solution_day_08_01(file_path: String) -> Option<usize> {

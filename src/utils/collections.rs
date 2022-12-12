@@ -1,6 +1,21 @@
+use std::fmt::{self, Debug};
+
 pub struct Faux2DArray<T> {
     items: Vec<T>,
-    width: usize,
+    pub width: usize,
+}
+
+impl<T: Debug> fmt::Display for Faux2DArray<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        // Write strictly the first element into the supplied output
+        // stream: `f`. Returns `fmt::Result` which indicates whether the
+        // operation succeeded or failed. Note that `write!` uses syntax which
+        // is very similar to `println!`.
+        self.items.chunks(self.width).for_each(|l| {
+            writeln!(f, "{:?}", l).expect("Cannot print line");
+        });
+        Ok(())
+    }
 }
 
 impl<T> Faux2DArray<T> {
@@ -28,7 +43,7 @@ impl<T> Faux2DArray<T> {
         Self { items, width }
     }
 
-    pub fn row_length(&self) -> usize {
+    pub fn height(&self) -> usize {
         self.items.len() / self.width
     }
 
@@ -52,7 +67,7 @@ impl<T> Faux2DArray<T> {
 
     pub fn add_col(&mut self, data: Vec<T>) -> std::result::Result<(), &'static str> {
         let data_length = data.len();
-        if data_length != self.row_length() {
+        if data_length != self.height() {
             return Err("Invalid column length");
         }
         for (i, d) in data.into_iter().enumerate() {
@@ -64,10 +79,10 @@ impl<T> Faux2DArray<T> {
     }
 
     pub fn remove_col(&mut self, col: usize) -> std::result::Result<(), &'static str> {
-        if col >= self.row_length() {
+        if col >= self.height() {
             return Err("Invalid column length");
         }
-        for i in (0..self.row_length()).rev() {
+        for i in (0..self.height()).rev() {
             let position = col + (self.width * i);
             println!("{:?}", position);
             self.items.remove(position);
@@ -147,10 +162,11 @@ impl<T> Faux2DArray<T> {
         }
 
         Some(
-            self.items[x..self.items.len() - (self.width * (y + 1))]
+            self.items
                 .iter()
-                .step_by(self.width)
-                .rev(),
+                .rev()
+                .skip((self.width - 1 - x) + (self.width * (self.height() - y)))
+                .step_by(self.width),
         )
     }
 }
@@ -290,6 +306,20 @@ mod tests {
     #[test]
     fn test_to_col_start() {
         let a = create_usize_array_2();
+        // println!("{}", a);
+        // println!(
+        //     "{:?}",
+        //     a.items
+        //         .iter()
+        //         .rev()
+        //         .skip((a.width - 1 - 1) + (a.width * (a.height() - 1)))
+        //         .step_by(a.width)
+        //         .collect::<Vec<&usize>>()
+        // );
+        let result: Vec<&usize> = a.to_col_start(1, 1).unwrap().collect();
+        let target = [&1];
+        assert_eq!(result.as_slice(), target);
+
         let result: Vec<&usize> = a.to_col_start(0, 2).unwrap().collect();
         let target = [&5, &0];
         assert_eq!(result.as_slice(), target);
