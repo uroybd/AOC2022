@@ -14,29 +14,31 @@ impl Coordinate {
         self.y += to.1;
     }
 
-    fn move_close_to(&mut self, to: &Coordinate) {
-        let dx = to.x - self.x;
-        let dy = to.y - self.y;
+    fn move_close_to(&mut self, to: (isize, isize)) {
+        let dx = to.0 - self.x;
+        let dy = to.1 - self.y;
         if dx.abs() >= 2 || dy.abs() >= 2 {
             self.move_by((dx.signum(), dy.signum()));
         }
+    }
+
+    fn coordinate_tuple(&self) -> (isize, isize) {
+        (self.x, self.y)
     }
 }
 
 #[derive(Debug)]
 struct Rope {
     links: Vec<Coordinate>,
-    movement_record: HashSet<Coordinate>,
+    movement_record: HashSet<(isize, isize)>,
 }
 
 impl Rope {
     fn at_start(tails: usize) -> Self {
-        let mut rope = Rope {
+        Rope {
             links: vec![Coordinate { x: 0, y: 0 }; tails + 1],
-            movement_record: HashSet::new(),
-        };
-        rope.movement_record.insert(Coordinate { x: 0, y: 0 });
-        rope
+            movement_record: HashSet::from([(0, 0)]),
+        }
     }
 
     fn move_to_direction(&mut self, direction: &str) {
@@ -52,10 +54,11 @@ impl Rope {
         let length = self.links.len();
 
         for idx in 1..length {
-            let to = self.links[idx - 1].clone();
-            self.links[idx].move_close_to(&to);
+            let to = self.links[idx - 1].coordinate_tuple();
+            self.links[idx].move_close_to(to);
         }
-        self.movement_record.insert(self.links[length - 1].clone());
+        self.movement_record
+            .insert(self.links[length - 1].coordinate_tuple());
     }
 
     fn run_instruction(&mut self, instruction: &str) {
