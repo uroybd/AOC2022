@@ -1,11 +1,14 @@
-use std::fs;
+use std::{fs, str::FromStr};
 
-pub fn read_integer_list(file_path: String, separator: String) -> Vec<i64> {
-    let content: Vec<i64> = fs::read_to_string(file_path)
+pub fn read_parsed_list<T: FromStr>(file_path: String, separator: String) -> Vec<T>
+where
+    <T as std::str::FromStr>::Err: std::fmt::Debug,
+{
+    let content: Vec<T> = fs::read_to_string(file_path)
         .expect("Invalid File")
         .trim()
         .split(&separator[..])
-        .map(|v| v.parse::<i64>().unwrap())
+        .map(|v| v.parse::<T>().unwrap())
         .collect();
     content
 }
@@ -26,16 +29,6 @@ pub fn read_usize_list(file_path: String, separator: String) -> Vec<usize> {
         .trim()
         .split(&separator[..])
         .map(|v| v.parse::<usize>().unwrap())
-        .collect();
-    content
-}
-
-pub fn read_lines(file_path: String) -> Vec<String> {
-    let content: Vec<String> = fs::read_to_string(file_path)
-        .expect("Invalid File")
-        .trim()
-        .split('\n')
-        .map(|s| s.to_string())
         .collect();
     content
 }
