@@ -25,8 +25,8 @@ impl WorryOperation {
         match self {
             WorryOperation::Add(x) => old + x,
             WorryOperation::Multiply(x) => old * x,
-            WorryOperation::Twice => old * 2,
             WorryOperation::Square => old.pow(2),
+            WorryOperation::Twice => old * 2,
         }
     }
 }
