@@ -86,19 +86,18 @@ fn largest_scenic_score(trees: &Faux2DArray<usize>) -> usize {
 }
 
 fn parse_input(file_path: String) -> Faux2DArray<usize> {
-    let mut trees = Faux2DArray::new(5);
-    fs::read_to_string(file_path)
+    let mut width = 0;
+    let mut trees: Faux2DArray<usize> = fs::read_to_string(file_path)
         .unwrap()
         .trim()
         .lines()
-        .for_each(|l| {
-            let row: Vec<usize> = l
-                .chars()
-                .map(|s| s.to_string().parse::<usize>().unwrap())
-                .collect();
-            trees.width = row.len();
-            trees.add_row(row).unwrap();
-        });
+        .flat_map(|l| {
+            let v = l.chars().map(|s| s.to_string().parse::<usize>().unwrap());
+            width = l.len();
+            v
+        })
+        .collect();
+    trees.width = width;
     trees
 }
 

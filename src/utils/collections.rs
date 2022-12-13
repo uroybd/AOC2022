@@ -1,8 +1,8 @@
 use std::fmt::{self, Debug};
 
 pub struct Faux2DArray<T> {
-    pub items: Vec<T>,
     pub width: usize,
+    pub items: Vec<T>,
 }
 
 impl<T: Debug> fmt::Display for Faux2DArray<T> {
@@ -28,6 +28,17 @@ impl<T: Debug> Debug for Faux2DArray<T> {
             writeln!(f, "{:?}", l).expect("Cannot print line");
         });
         Ok(())
+    }
+}
+
+impl<T> FromIterator<T> for Faux2DArray<T> {
+    fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {
+        let mut s = Self {
+            items: Vec::from_iter(iter),
+            width: 0,
+        };
+        s.width = s.items.len();
+        s
     }
 }
 
@@ -59,16 +70,6 @@ impl<T> Faux2DArray<T> {
                 items.push(filler(x, y));
             }
         }
-        Self { items, width }
-    }
-
-    pub fn filled_from_iter(
-        width: usize,
-        height: usize,
-        filler: &mut impl Iterator<Item = T>,
-    ) -> Faux2DArray<T> {
-        let mut items = Vec::with_capacity(width * height);
-        items.extend(filler);
         Self { items, width }
     }
 
