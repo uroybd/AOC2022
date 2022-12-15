@@ -24,8 +24,8 @@ Shamelessly stole and adapted [the scaffolding mechanism found here](https://git
 | **Day 12** | 2.70ms | 633.11ms | 635.81ms |
 | **Day 13** | 2.72ms | 2.89ms | 5.61ms |
 | **Day 14** | 5.31ms | 97.97ms | 103.27ms |
-| **Day 15** | 106.55ms | 80.98ms | 187.52ms |
+| **Day 15** | 106.49ms | 80.39ms | 186.88ms |
 
 
-**Total runtime: 941.27ms**
+**Total runtime: 940.63ms**
 
