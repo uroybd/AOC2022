@@ -10,7 +10,6 @@ use aoc_2022::solutions::day09::{solution_day_09_01, solution_day_09_02};
 use aoc_2022::solutions::day10::{solution_day_10_01, solution_day_10_02};
 use aoc_2022::solutions::day11::{solution_day_11_01, solution_day_11_02};
 use aoc_2022::solutions::day12::{solution_day_12_01, solution_day_12_02};
-
 use aoc_2022::solutions::day13::{solution_day_13_01, solution_day_13_02};
 use aoc_2022::solutions::day14::{solution_day_14_01, solution_day_14_02};
 use aoc_2022::solutions::day15::{solution_day_15_01, solution_day_15_02};
@@ -156,10 +155,6 @@ fn all_solutions(c: &mut Criterion) {
 
     g.finish()
 }
-
-// fn day_02(c: &mut Criterion) {
-
-// }
 
 criterion_group!(solutions, all_solutions);
 criterion_main!(solutions);
