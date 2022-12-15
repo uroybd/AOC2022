@@ -8,7 +8,7 @@ type Coordinates = (isize, isize);
 struct Sensor {
     coordinates: Coordinates,
     beacon: Coordinates,
-    radius: usize,
+    radius: isize,
 }
 
 impl FromStr for Sensor {
@@ -36,8 +36,8 @@ impl Sensor {
     }
 }
 
-fn manhattan_distance(coords1: Coordinates, coords2: Coordinates) -> usize {
-    coords1.0.abs_diff(coords2.0) + coords1.1.abs_diff(coords2.1) as usize
+fn manhattan_distance(coords1: Coordinates, coords2: Coordinates) -> isize {
+    (coords1.0.abs_diff(coords2.0) + coords1.1.abs_diff(coords2.1)) as isize
 }
 
 pub fn parse_value(inp: &str) -> isize {
@@ -83,7 +83,7 @@ pub fn solution_day_15_01(file_path: String, y: isize) -> Option<usize> {
     )
 }
 
-pub fn solution_day_15_02(file_path: String, bound: isize) -> Option<usize> {
+pub fn solution_day_15_02(file_path: String, bound: isize) -> Option<isize> {
     let sensors = parse_input(file_path);
     sensors.iter().find_map(|s| {
         ((s.coordinates.0 - (s.radius as isize) - 1).max(0)..=s.coordinates.0.min(bound))
@@ -92,7 +92,7 @@ pub fn solution_day_15_02(file_path: String, bound: isize) -> Option<usize> {
                 sensors
                     .iter()
                     .all(|s| !s.in_radius(coords))
-                    .then_some((coords.0 * 4000000 + coords.1) as usize)
+                    .then_some(coords.0 * 4000000 + coords.1)
             })
     })
 }
