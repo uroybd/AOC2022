@@ -87,7 +87,7 @@ pub fn solution_day_15_02(file_path: String, bound: isize) -> Option<usize> {
     let sensors = parse_input(file_path);
     sensors.iter().find_map(|s| {
         ((s.coordinates.0 - (s.radius as isize) - 1).max(0)..=s.coordinates.0.min(bound))
-            .zip(s.coordinates.1..=bound)
+            .zip(s.coordinates.1..=(s.coordinates.1 + (s.radius as isize)).min(bound))
             .find_map(|coords| {
                 sensors
                     .iter()
