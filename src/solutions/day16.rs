@@ -72,15 +72,57 @@ fn update(
     }
 }
 
-fn get_flow_at(
+fn generate_bitmap(valves: &HashMap<String, Valve>) -> HashMap<String, usize> {
+    let mut keys: Vec<&String> = valves.keys().collect();
+    keys.sort();
+    keys.into_iter()
+        .enumerate()
+        .map(|(idx, key)| (key.clone(), 1 << idx))
+        .collect()
+}
+
+fn get_flow_at(valves: &HashMap<String, Valve>, limit: usize) -> Option<usize> {
+    let mut flows: HashMap<(String, usize), usize> = HashMap::new();
+    let bitmap: HashMap<String, usize> = generate_bitmap(valves);
+    let mut state = vec![("AA".to_string(), 0, 0)];
+    for t in 1..=limit {
+        let mut new_state = vec![];
+        for (loc, opened, flow) in state.iter() {
+            let key = (loc.clone(), *opened);
+            if let Some(v) = flows.get(&key) {
+                if flow <= v {
+                    continue;
+                }
+            }
+            flows.insert(key, *flow);
+
+            let valve = valves.get(loc).unwrap();
+            if bitmap[loc] & opened == 0 && valve.flow_rate > 0 {
+                new_state.push((
+                    loc.clone(),
+                    opened | bitmap[loc],
+                    flow + valve.flow_rate * (limit - t),
+                ));
+            }
+            for dest in valve.leads_to.iter() {
+                new_state.push((dest.clone(), *opened, *flow));
+            }
+        }
+
+        state = new_state;
+    }
+    state.iter().map(|(_, _, flow)| *flow).max()
+}
+
+fn get_flow_history_at(
     valves: &HashMap<String, Valve>,
     limit: usize,
 ) -> HashMap<(String, usize, usize), usize> {
     let mut flows: HashMap<(String, usize, usize), usize> = HashMap::new();
     let bitmap: HashMap<String, usize> = valves
-        .iter()
+        .keys()
         .enumerate()
-        .map(|(idx, (k, _))| (k.clone(), idx))
+        .map(|(idx, key)| (key.clone(), idx))
         .collect();
     flows.insert(("AA".to_string(), 0, 0), 0);
     for time in 1..=limit {
@@ -116,14 +158,13 @@ fn get_flow_at(
 }
 
 pub fn solution_day_16_01(file_path: String) -> Option<usize> {
-    let valves = parse_input(file_path);
-    let flows = get_flow_at(&valves, 30);
-    Some(*flows.values().max().unwrap())
+    // let valves = parse_input(file_path);
+    get_flow_at(&parse_input(file_path), 30)
 }
 
 pub fn solution_day_16_02(file_path: String) -> Option<usize> {
     let valves = parse_input(file_path);
-    let flows = get_flow_at(&valves, 26);
+    let flows = get_flow_history_at(&valves, 26);
     let mut sanitized_flow: HashMap<usize, usize> = HashMap::new();
     for ((_, open, t), flow) in flows.iter() {
         if *t == 26 {
